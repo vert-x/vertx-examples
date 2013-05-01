@@ -32,7 +32,7 @@ public class SockJSExample extends Verticle {
 
     server.requestHandler(new Handler<HttpServerRequest>() {
       public void handle(HttpServerRequest req) {
-        if (req.path.equals("/")) req.response().sendFile("sockjs/index.html"); // Serve the html
+        if (req.path().equals("/")) req.response().sendFile("sockjs/index.html"); // Serve the html
       }
     });
 
@@ -42,7 +42,7 @@ public class SockJSExample extends Verticle {
       public void handle(final SockJSSocket sock) {
         sock.dataHandler(new Handler<Buffer>() {
           public void handle(Buffer data) {
-            sock.writeBuffer(data); // Echo it back
+            sock.write(data); // Echo it back
           }
         });
       }

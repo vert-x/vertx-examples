@@ -15,16 +15,16 @@ import org.vertx.java.platform.Verticle;
 public class BridgeServer extends Verticle {
   Logger logger;
 
-  public void start() throws Exception {
-    logger = container.getLogger();
+  public void start() {
+    logger = container.logger();
     
     HttpServer server = vertx.createHttpServer();
 
     // Also serve the static resources. In real life this would probably be done by a CDN
     server.requestHandler(new Handler<HttpServerRequest>() {
       public void handle(HttpServerRequest req) {
-        if (req.path.equals("/")) req.response().sendFile("eventbusbridge/index.html"); // Serve the index.html
-        if (req.path.endsWith("vertxbus.js")) req.response().sendFile("eventbusbridge/vertxbus.js"); // Serve the js
+        if (req.path().equals("/")) req.response().sendFile("eventbusbridge/index.html"); // Serve the index.html
+        if (req.path().endsWith("vertxbus.js")) req.response().sendFile("eventbusbridge/vertxbus.js"); // Serve the js
       }
     });
 
@@ -34,7 +34,7 @@ public class BridgeServer extends Verticle {
     ServerHook hook = new ServerHook(logger);
 
     SockJSServer sockJSServer = vertx.createSockJSServer(server);
-    sockJSServer.setupHook(hook);
+    sockJSServer.setHook(hook);
     sockJSServer.bridge(new JsonObject().putString("prefix", "/eventbus"), permitted, permitted);
 
     server.listen(8080);

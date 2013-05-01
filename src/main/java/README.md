@@ -240,7 +240,7 @@ This example shows how you can access various resources on your classpath from w
 Run it with
 
 cd resourceload
-vertx run /ResourceLoadExample.java
+vertx run ResourceLoadExample.java
 
 
 

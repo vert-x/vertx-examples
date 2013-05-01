@@ -27,11 +27,11 @@ public class SendFileExample extends Verticle {
   public void start() {
     vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
       public void handle(HttpServerRequest req) {
-        if (req.path.equals("/")) {
+        if (req.path().equals("/")) {
           req.response().sendFile(webroot + "index.html");
         } else {
           //Clearly in a real server you would check the path for better security!!
-          req.response().sendFile(webroot + req.path);
+          req.response().sendFile(webroot + req.path());
         }
       }
     }).listen(8080);

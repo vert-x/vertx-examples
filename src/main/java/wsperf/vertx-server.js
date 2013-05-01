@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx.js')
+var console = require('console')
 
 var connCount = 0
 vertx.createHttpServer().websocketHandler(function(ws) {
   console.log("Connection count: " + ++connCount);
   new vertx.Pump(ws, ws).start();
-}).listen(8080, 'localhost');
+}).listen(8080);
 

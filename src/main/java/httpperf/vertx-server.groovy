@@ -15,12 +15,12 @@
 */
 
 vertx.createHttpServer().requestHandler { req ->
-  //req.response.end()
+  req.response.end()
   //req.response.sendFile("httpperf/foo.html")
-  vertx.fileSystem.readFile("httpperf/foo.html") { ar ->
-    req.response.headers["content-length"] = ar.result.length
-    req.response.headers["content-type"] = "text/html"
-    req.response.end(ar.result)
-  }
-}.listen(8080, 'localhost')
+//  vertx.fileSystem.readFile("httpperf/foo.html") { ar ->
+//    req.response.headers["content-length"] = ar.result.length
+//    req.response.headers["content-type"] = "text/html"
+//    req.response.end(ar.result)
+//  }
+}.listen(8080)
 

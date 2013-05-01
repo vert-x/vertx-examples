@@ -19,7 +19,7 @@ package upload;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.SimpleHandler;
+import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.file.AsyncFile;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.streams.Pump;
@@ -41,19 +41,19 @@ public class UploadServer extends Verticle {
 
         vertx.fileSystem().open(filename, new AsyncResultHandler<AsyncFile>() {
           public void handle(AsyncResult<AsyncFile> ar) {
-            final AsyncFile file = ar.result;
-            final Pump pump = Pump.createPump(req, file.getWriteStream());
+            final AsyncFile file = ar.result();
+            final Pump pump = Pump.createPump(req, file);
             final long start = System.currentTimeMillis();
-            req.endHandler(new SimpleHandler() {
+            req.endHandler(new VoidHandler() {
               public void handle() {
                 file.close(new AsyncResultHandler<Void>() {
                   public void handle(AsyncResult<Void> ar) {
-                    if (ar.exception == null) {
+                    if (ar.succeeded()) {
                       req.response().end();
                       long end = System.currentTimeMillis();
                       System.out.println("Uploaded " + pump.getBytesPumped() + " bytes to " + filename + " in " + (end - start) + " ms");
                     } else {
-                      ar.exception.printStackTrace(System.err);
+                      ar.cause().printStackTrace(System.err);
                     }
                   }
                 });

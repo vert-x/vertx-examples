@@ -19,7 +19,7 @@ package upload;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.SimpleHandler;
+import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.file.AsyncFile;
 import org.vertx.java.core.http.HttpClient;
 import org.vertx.java.core.http.HttpClientRequest;
@@ -27,55 +27,62 @@ import org.vertx.java.core.http.HttpClientResponse;
 import org.vertx.java.core.streams.Pump;
 import org.vertx.java.platform.Verticle;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class UploadClient extends Verticle {
 
-  public void start() throws Exception {
+  public void start() {
 
     HttpClient client = vertx.createHttpClient().setPort(8080).setHost("localhost");
 
     final HttpClientRequest req = client.put("/some-url", new Handler<HttpClientResponse>() {
       public void handle(HttpClientResponse response) {
-        System.out.println("File uploaded " + response.statusCode);
+        System.out.println("File uploaded " + response.statusCode());
       }
     });
 
     String filename = "upload/upload.txt";
 
     // For a non-chunked upload you need to specify size of upload up-front
-    req.headers().put("Content-Length", Files.size(Paths.get(filename)));
+    try {
+      req.headers().set("Content-Length", String.valueOf(Files.size(Paths.get(filename))));
 
-    // For a chunked upload you don't need to specify size, just do:
-    // req.setChunked(true);
+      // For a chunked upload you don't need to specify size, just do:
+      // req.setChunked(true);
 
-    vertx.fileSystem().open(filename, new AsyncResultHandler<AsyncFile>() {
-      public void handle(AsyncResult<AsyncFile> ar) {
-        final AsyncFile file = ar.result;
-        Pump pump = Pump.createPump(file.getReadStream(), req);
-        pump.start();
+      vertx.fileSystem().open(filename, new AsyncResultHandler<AsyncFile>() {
+        public void handle(AsyncResult<AsyncFile> ar) {
+          final AsyncFile file = ar.result();
+          Pump pump = Pump.createPump(file, req);
+          pump.start();
 
-        file.getReadStream().endHandler(new SimpleHandler() {
-          public void handle() {
+          file.endHandler(new VoidHandler() {
+            public void handle() {
 
-            file.close(new AsyncResultHandler<Void>() {
-              public void handle(AsyncResult<Void> ar) {
-                if (ar.exception == null) {
-                  req.end();
-                  System.out.println("Sent request");
-                } else {
-                  ar.exception.printStackTrace(System.err);
+              file.close(new AsyncResultHandler<Void>() {
+                public void handle(AsyncResult<Void> ar) {
+                  if (ar.succeeded()) {
+                    req.end();
+                    System.out.println("Sent request");
+                  } else {
+                    ar.cause().printStackTrace(System.err);
+                  }
                 }
-              }
-            });
-          }
-        });
-      }
+              });
+            }
+          });
+        }
 
-      public void onException(Exception e) {
-        e.printStackTrace();
-      }
-    });
+        public void onException(Exception e) {
+          e.printStackTrace();
+        }
+      });
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
   }
 }

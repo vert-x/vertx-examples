@@ -16,6 +16,8 @@ package echo;
  * limitations under the License.
  */
 
+import org.vertx.java.core.AsyncResult;
+import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.net.NetSocket;
@@ -24,20 +26,24 @@ import org.vertx.java.platform.Verticle;
 public class EchoClient extends Verticle {
 
   public void start() {
-    vertx.createNetClient().connect(1234, "localhost", new Handler<NetSocket>() {
-      public void handle(NetSocket socket) {
+    vertx.createNetClient().connect(1234, "localhost", new AsyncResultHandler<NetSocket>() {
+      public void handle(AsyncResult<NetSocket> asyncResult) {
+        if (asyncResult.succeeded()) {
+          NetSocket socket = asyncResult.result();
+          socket.dataHandler(new Handler<Buffer>() {
+            public void handle(Buffer buffer) {
+              System.out.println("Net client receiving: " + buffer);
+            }
+          });
 
-        socket.dataHandler(new Handler<Buffer>() {
-          public void handle(Buffer buffer) {
-            System.out.println("Net client receiving: " + buffer);
+          //Now send some data
+          for (int i = 0; i < 10; i++) {
+            String str = "hello" + i + "\n";
+            System.out.print("Net client sending: " + str);
+            socket.write(new Buffer(str));
           }
-        });
-
-        //Now send some data
-        for (int i = 0; i < 10; i++) {
-          String str = "hello" + i + "\n";
-          System.out.print("Net client sending: " + str);
-          socket.write(new Buffer(str));
+        } else {
+          asyncResult.cause().printStackTrace();
         }
       }
     });

@@ -16,17 +16,17 @@ The client and rate counter therefore need to be clustered since they communicat
 
 (Run everything from the parent directory of this directory).
 
-Run the rate counter in a console (give it a unique cluster port)
+Run the rate counter in a console . 
 
-`vertx run org.vertx.java.examples.perf.RateCounter -cp classes -cluster -cluster-port 25501`
+`vertx run perf/RateCounter.java -cluster`
 
 Run the server in another console (give it 6 instances to utilise the cores on the server)
 
-`vertx run org.vertx.java.examples.httpperf.PerfServer -cp classes -instances 6`
+`vertx run httpperf/PerfServer.java -instances 6`
 
 Run the client in another console:
 
-`vertx run org.vertx.java.examples.httpperf.PerfClient -cp classes -instances 6 -cluster`
+`vertx httpperf/PerfClient.java -instances 6 -cluster`
 
 Of course, you can run client and server on different machines. You'll probably need a fast network to avoid getting IO bound.
 
@@ -42,12 +42,12 @@ You can run a clustered node.js too:
 
 Also.. you can run a vert.x JavaScript server instead of a Java one if you like:
 
-`vertx run vertx-server.js -instances 8`
+`vertx run vertx-server.js -instances 6`
 
 or the Ruby server:
 
-`vertx run vertx_server.rb -instances 8`
+`vertx run vertx_server.rb -instances 6`
 
 or the Groovy server:
 
-`vertx run vertx_server.groovy -instances 8`
+`vertx run vertx_server.groovy -instances 6`

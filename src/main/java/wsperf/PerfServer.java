@@ -28,7 +28,7 @@ public class PerfServer extends Verticle {
 
   private static final int BUFF_SIZE = 32 * 1024;
 
-  public void start() throws Exception {
+  public void start() {
     vertx.createHttpServer().setReceiveBufferSize(BUFF_SIZE).setSendBufferSize(BUFF_SIZE).setAcceptBacklog(32000).
         websocketHandler(new Handler<ServerWebSocket>() {
       public void handle(ServerWebSocket ws) {

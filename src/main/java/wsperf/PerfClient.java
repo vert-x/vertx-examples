@@ -17,7 +17,7 @@ package wsperf;
  */
 
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.SimpleHandler;
+import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.http.HttpClient;
@@ -92,7 +92,7 @@ public class PerfClient extends Verticle {
       }
     });
     if (count + 1 < CONNS) {
-      vertx.runOnContext(new SimpleHandler() {
+      vertx.runOnContext(new VoidHandler() {
         public void handle() {
           connect(count + 1);
         }
@@ -104,7 +104,7 @@ public class PerfClient extends Verticle {
     WebSocket ws = websockets.poll();
     writeWebSocket(ws);
     if (!websockets.isEmpty()) {
-      vertx.runOnContext(new SimpleHandler() {
+      vertx.runOnContext(new VoidHandler() {
         public void handle() {
           startWebSocket();
         }
@@ -120,7 +120,6 @@ public class PerfClient extends Verticle {
     client.setReceiveBufferSize(BUFF_SIZE);
     client.setSendBufferSize(BUFF_SIZE);
     client.setConnectTimeout(60000);
-    client.setBossThreads(4);
     connect(0);
   }
 
@@ -128,14 +127,14 @@ public class PerfClient extends Verticle {
     if (!ws.writeQueueFull()) {
       //ws.writeTextFrame(message);
       ws.writeBinaryFrame(new Buffer(message));
-      vertx.runOnContext(new SimpleHandler() {
+      vertx.runOnContext(new VoidHandler() {
         public void handle() {
           writeWebSocket(ws);
         }
       });
     } else {
       // Flow control
-      ws.drainHandler(new SimpleHandler() {
+      ws.drainHandler(new VoidHandler() {
         public void handle() {
           writeWebSocket(ws);
         }

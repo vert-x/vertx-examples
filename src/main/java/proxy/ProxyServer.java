@@ -17,7 +17,7 @@ package proxy;
  */
 
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.SimpleHandler;
+import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpClient;
 import org.vertx.java.core.http.HttpClientRequest;
@@ -33,12 +33,12 @@ public class ProxyServer extends Verticle {
 
     vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
       public void handle(final HttpServerRequest req) {
-        System.out.println("Proxying request: " + req.uri);
-        final HttpClientRequest cReq = client.request(req.method, req.uri, new Handler<HttpClientResponse>() {
+        System.out.println("Proxying request: " + req.uri());
+        final HttpClientRequest cReq = client.request(req.method(), req.uri(), new Handler<HttpClientResponse>() {
           public void handle(HttpClientResponse cRes) {
-            System.out.println("Proxying response: " + cRes.statusCode);
-            req.response().statusCode = cRes.statusCode;
-            req.response().headers().putAll(cRes.headers());
+            System.out.println("Proxying response: " + cRes.statusCode());
+            req.response().setStatusCode(cRes.statusCode());
+            req.response().headers().set(cRes.headers());
             req.response().setChunked(true);
             cRes.dataHandler(new Handler<Buffer>() {
               public void handle(Buffer data) {
@@ -46,14 +46,14 @@ public class ProxyServer extends Verticle {
                 req.response().write(data);
               }
             });
-            cRes.endHandler(new SimpleHandler() {
+            cRes.endHandler(new VoidHandler() {
               public void handle() {
                 req.response().end();
               }
             });
           }
         });
-        cReq.headers().putAll(req.headers());
+        cReq.headers().set(req.headers());
         cReq.setChunked(true);
         req.dataHandler(new Handler<Buffer>() {
           public void handle(Buffer data) {
@@ -61,8 +61,9 @@ public class ProxyServer extends Verticle {
             cReq.write(data);
           }
         });
-        req.endHandler(new SimpleHandler() {
+        req.endHandler(new VoidHandler() {
           public void handle() {
+            System.out.println("end of the request");
             cReq.end();
           }
         });

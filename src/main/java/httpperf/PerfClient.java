@@ -17,7 +17,7 @@ package httpperf;
  */
 
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.SimpleHandler;
+import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.http.HttpClient;
 import org.vertx.java.core.http.HttpClientResponse;
@@ -45,7 +45,7 @@ public class PerfClient extends Verticle implements Handler<HttpClientResponse> 
     if (response.statusCode() != 200) {
       throw new IllegalStateException("Invalid response");
     }
-    response.endHandler(new SimpleHandler() {
+    response.endHandler(new VoidHandler() {
       public void handle() {
         count++;
         if (count % 2000 == 0) {

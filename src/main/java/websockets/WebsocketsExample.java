@@ -27,7 +27,7 @@ public class WebsocketsExample extends Verticle {
   public void start() {
     vertx.createHttpServer().websocketHandler(new Handler<ServerWebSocket>() {
       public void handle(final ServerWebSocket ws) {
-        if (ws.path.equals("/myapp")) {
+        if (ws.path().equals("/myapp")) {
           ws.dataHandler(new Handler<Buffer>() {
             public void handle(Buffer data) {
               ws.writeTextFrame(data.toString()); // Echo it back
@@ -39,7 +39,7 @@ public class WebsocketsExample extends Verticle {
       }
     }).requestHandler(new Handler<HttpServerRequest>() {
       public void handle(HttpServerRequest req) {
-        if (req.path.equals("/")) req.response().sendFile("websockets/ws.html"); // Serve the html
+        if (req.path().equals("/")) req.response().sendFile("websockets/ws.html"); // Serve the html
       }
     }).listen(8080);
   }

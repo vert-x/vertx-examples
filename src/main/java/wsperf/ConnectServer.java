@@ -29,7 +29,7 @@ public class ConnectServer extends Verticle {
 
   int count = 0;
 
-  public void start() throws Exception {
+  public void start() {
     vertx.createHttpServer().setReceiveBufferSize(BUFF_SIZE).setSendBufferSize(BUFF_SIZE).
         websocketHandler(new Handler<ServerWebSocket>() {
       public void handle(ServerWebSocket ws) {

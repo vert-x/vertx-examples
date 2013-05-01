@@ -17,27 +17,29 @@ package proxy;
  */
 
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.SimpleHandler;
+import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.platform.Verticle;
+
+import java.util.Map;
 
 public class Server extends Verticle {
 
   public void start() {
     vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
       public void handle(final HttpServerRequest req) {
-        System.out.println("Got request: " + req.uri);
+        System.out.println("Got request: " + req.uri());
         System.out.println("Headers are: ");
-        for (String key : req.headers().keySet()) {
-          System.out.println(key + ":" + req.headers().get(key));
+        for (Map.Entry<String, String> entry : req.headers()) {
+          System.out.println(entry.getKey() + ":" + entry.getValue());
         }
         req.dataHandler(new Handler<Buffer>() {
           public void handle(Buffer data) {
             System.out.println("Got data: " + data);
           }
         });
-        req.endHandler(new SimpleHandler() {
+        req.endHandler(new VoidHandler() {
           public void handle() {
             req.response().setChunked(true);
             //Now we got everything, send back some data
