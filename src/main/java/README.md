@@ -242,6 +242,35 @@ Run it with
 cd resourceload
 vertx run ResourceLoadExample.java
 
+## Event Bus Point to Point
+
+This examples shows how to use the event bus to send point to point messages between different verticles, and how to
+reply to messages.
+
+A "ping!" message is sent every second by the Sender verticle. The Receiver verticle should receive it and send
+back a "pong!"
+
+Run the receiver and sender in different JVM instances. Since they are separate we will enable clustering so they
+can talk to each other:
+
+vertx run eventbus_pointtopoint/Receiver.java -cluster
+vertx run eventbus_pointtopoint/Sender.java -cluster
+
+## Event Bus Pub Sub
+
+This examples shows how to use the event bus to do publish/subscribe messaging
+
+A news item message is published every second by the Sender verticle on to the address 'news-feed'. This is the picked
+up by any listenes on that address.
+
+Run a few receivers and sender in different JVM instances. Since they are separate we will enable clustering so they
+can talk to each other:
+
+vertx run eventbus_pubsub/Receiver.java -cluster
+vertx run eventbus_pubsub/Receiver.java -cluster
+vertx run eventbus_pubsub/Receiver.java -cluster
+vertx run eventbus_pubsub/Sender.java -cluster
+
 
 
 
