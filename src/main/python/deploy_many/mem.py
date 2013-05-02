@@ -15,7 +15,7 @@
 import vertx
 
 def deployit(count):
-    def handler(deploy_id):
+    def handler(err, deploy_id):
         print "deployed ", count
         if deploy_id is not None:
             undeployit(deploy_id, count)
@@ -24,7 +24,8 @@ def deployit(count):
     vertx.deploy_verticle("child.py", handler=handler)
 
 def undeployit(deploy_id, count):
-    def handler():
+    print "undeploying"
+    def handler(err):
         newcount = count + 1
         if newcount < 10:
             deployit(newcount)

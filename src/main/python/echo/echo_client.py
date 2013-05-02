@@ -17,12 +17,15 @@ from core.buffer import Buffer
 
 client = vertx.create_net_client(port=1234, host="localhost")
 
-def connect_handler(socket):
-    @socket.data_handler
-    def data_handler(data):
-        print "Echo client received %s"% data
-    for i in range(10):
-        print "Echo client sending %d"% i
-        socket.write_buffer(Buffer.create_from_str("%d"% i))
+def connect_handler(err, socket):
+    if err is None:
+        @socket.data_handler
+        def data_handler(data):
+            print "Echo client received %s"% data
+        for i in range(10):
+            print "Echo client sending %d"% i
+            socket.write(Buffer.create_from_str("%d"% i))
+    else:
+        print 'Failed to connect %s' %err
 
 client.connect(1234, "localhost", connect_handler)

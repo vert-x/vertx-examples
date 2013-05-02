@@ -29,8 +29,8 @@ def connect_handler(socket):
         def each(address):
             EventBus.send(address, data)
 
-    @socket.closed_handler
-    def closed_handler():
+    @socket.close_handler
+    def close_handler():
         conns.delete(socket.write_handler_id)
 
 server.listen(1234)

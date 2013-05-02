@@ -19,13 +19,16 @@ client = vertx.create_net_client()
 client.ssl = True
 client.trust_all = True
 
-def connect_handler(socket):
-    def data_handler(data):
-        print "Echo client received %s"%data
+def connect_handler(err, socket):
+    if err is None:
+        def data_handler(data):
+            print "Echo client received %s"%data
 
-    socket.data_handler(data_handler)
-    for i in range(10):
-        print "Echo client sending %d"%i
-        socket.write_buffer(Buffer.create_from_str("%d"% i))
+        socket.data_handler(data_handler)
+        for i in range(10):
+            print "Echo client sending %d"%i
+            socket.write(Buffer.create_from_str("%d"% i))
+    else:
+        print 'Failed to connect %s' % err
 
 client.connect(1234, "localhost", connect_handler)

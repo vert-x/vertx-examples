@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#print "in child"
+print "in child"
 
 def vertx_stop():
     print "in stop"

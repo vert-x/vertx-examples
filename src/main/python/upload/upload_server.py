@@ -22,6 +22,8 @@ from core.streams import Pump
 
 server = vertx.create_http_server()
 
+fs = vertx.file_system()
+
 @server.request_handler
 def request_handler(req):
     req.pause()
@@ -34,7 +36,7 @@ def request_handler(req):
     print "Got request storing in %s"% filename
 
     def file_open(err, file):
-        pump = Pump(req, file.write_stream)
+        pump = Pump(req, file)
         start_time = datetime.now()
 
         def end_handler(stream):
@@ -47,6 +49,6 @@ def request_handler(req):
         pump.start()
         req.resume()
 
-    FileSystem.open(filename, handler=file_open)
+    fs.open(filename, handler=file_open)
 
 server.listen(8080)

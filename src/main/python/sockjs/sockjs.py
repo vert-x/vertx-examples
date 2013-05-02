@@ -27,7 +27,7 @@ sjs_server = vertx.create_sockjs_server(server)
 # The handler for the SockJS app - we just echo data back
 def sock_handler(sock):
     def data_handler(buff):
-        sock.write_buffer(buff)
+        sock.write(buff)
     sock.data_handler(data_handler)
 
 sjs_server.install_app( {"prefix": "/testapp"}, sock_handler)

@@ -20,6 +20,8 @@ client = vertx.create_http_client()
 client.port = 8080
 client.host = "localhost"
 
+fs = vertx.file_system()
+
 def response_handler(resp):
     print "Response %d"% resp.status_code
 
@@ -27,17 +29,19 @@ req = client.put("/someurl", response_handler)
 filename = "upload/upload.txt"
 
 def file_props(err, props):
-    req.put_header("Content-Length", props.size)
+    print "in file_props"
+    req.put_header("Content-Length", "%s" % props.size)
 
     def open_handler(err, file):
-        rs = file.read_stream
-        pump = Pump(rs, req)
+        print "in open handler"
+        pump = Pump(file, req)
 
         def end_handler(stream):
             req.end()
-        rs.end_handler(end_handler)
+        file.end_handler(end_handler)
         pump.start()
 
-    FileSystem.open(filename, handler=open_handler)
+    fs.open(filename, handler=open_handler)
+    print "called open"
 
-FileSystem.props(filename, file_props)
+fs.props(filename, file_props)

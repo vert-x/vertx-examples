@@ -22,7 +22,7 @@ server.key_store_password="wibble"
 @server.connect_handler
 def connect_handler(socket):
     def data_handler(data):
-        socket.write_buffer(data)
+        socket.write(data)
     socket.data_handler(data_handler)
 
 server.listen(1234)
