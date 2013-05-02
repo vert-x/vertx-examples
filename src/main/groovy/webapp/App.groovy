@@ -71,11 +71,14 @@ container.with {
 
   // Deploy a MongoDB persistor module
 
-  deployModule('io.vertx~mod-mongo-persistor~2.0.0-SNAPSHOT') {
-
-    // And when it's deployed run a script to load it with some reference
-    // data for the demo
-    deployVerticle('StaticData.groovy')
+  deployModule('io.vertx~mod-mongo-persistor~2.0.0-SNAPSHOT') { asyncResult ->
+    if (asyncResult.succeeded) {
+      // And when it's deployed run a script to load it with some reference
+      // data for the demo
+      deployVerticle('StaticData.groovy')
+    } else {
+      println "Failed to deploy ${asyncResult.cause}"
+    }
   }
 
   // Deploy an auth manager to handle the authentication
