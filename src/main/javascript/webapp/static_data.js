@@ -1,4 +1,4 @@
-load('vertx.js');
+var vertx = require('vertx')
 
 var eb = vertx.eventBus;
 

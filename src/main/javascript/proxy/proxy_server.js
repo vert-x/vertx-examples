@@ -13,29 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
-var client = vertx.createHttpClient().setPort(8282);
+var client = vertx.createHttpClient().port(8282);
 
 vertx.createHttpServer().requestHandler(function(req) {
-  stdout.println("Proxying request: " + req.uri);
+  console.log("Proxying request: " + req.uri());
 
-  var c_req = client.request(req.method, req.uri, function(c_res) {
-    stdout.println("Proxying response: " + c_res.statusCode);
-    req.response.statusCode = c_res.statusCode;
-    req.response.setChunked(true);
-    req.response.putAllHeaders(c_res.headers());
+  var c_req = client.request(req.method(), req.uri(), function(c_res) {
+    console.log("Proxying response: " + c_res.statusCode());
+    req.response.statusCode(c_res.statusCode());
+    req.response.chunked(true);
+    req.response.headers().setHeaders(c_res.headers());
     c_res.dataHandler(function(data) {
-      stdout.println("Proxying response body: " + data);
-      req.response.writeBuffer(data);
+      console.log("Proxying response body: " + data);
+      req.response.write(data);
     });
     c_res.endHandler(function() { req.response.end() });
   });
-  c_req.setChunked(true);
-  c_req.putAllHeaders(req.headers());
+  c_req.chunked(true);
+  c_req.headers().setHeaders(req.headers());
   req.dataHandler(function(data) {
-    stdout.println("Proxying request body " + data);
-    c_req.writeBuffer(data);
+    console.log("Proxying request body " + data);
+    c_req.write(data);
   });
   req.endHandler(function() { c_req.end() });
 

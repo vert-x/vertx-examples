@@ -1,14 +1,15 @@
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
-var client = vertx.createHttpClient().setPort(8080);
+var client = vertx.createHttpClient().port(8080);
 var request = client.put('/', function(resp) {
-  stdout.println("Got response " + resp.statusCode);
+  console.log("Got response " + resp.statusCode());
   resp.bodyHandler(function(body) {
-    stdout.println("Got data " + body);
+    console.log("Got data " + body);
   })
 });
 
-request.setChunked(true)
+request.chunked(true)
 
 for (var i = 0; i < 10; i++) {
   request.write("client-chunk-" + i);

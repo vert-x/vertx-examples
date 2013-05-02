@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-var vertx = require('vertx')
-var console = require('console')
+var eb = require("event_bus");
+var console = require("console");
+var vertx = require("vertx")
 
-vertx.createHttpServer().requestHandler(function(req) {
-  req.pause()
-  var filename = java.util.UUID.randomUUID() + ".uploaded"
-  vertx.fileSystem.open(filename, function(err, file) {
-    var pump = new vertx.Pump(req, file)
-    req.endHandler(function() {
-      file.close(function() {
-        console.log("Uploaded " + pump.getBytesPumped() + " bytes to " + filename);
-        req.response.end();
-      });
-    });
-    pump.start()
-    req.resume()
+vertx.setPeriodic(1000, function sendMessage() {
+  eb.send('ping-address', 'ping!', function(reply) {
+    console.log("Received reply: " + reply);
   });
-}).listen(8080)
+})
+
+

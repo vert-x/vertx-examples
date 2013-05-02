@@ -1,4 +1,5 @@
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
 var eb = vertx.eventBus;
 
@@ -17,14 +18,11 @@ eb.registerHandler(creditsAddress, handler);
 var credits = 0;
 var count = 0
 
-sendMessage();
-
 function sendMessage() {
   for (var i = 0; i < batchSize / 2; i++) {
     if (credits > 0) {
       credits--;
       eb.send(address, "some-message");
-      // stdout.println("sent message " + count);
       count++;
     }
     else {

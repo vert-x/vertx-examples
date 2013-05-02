@@ -1,6 +1,5 @@
-load('vertx.js')
-
-console.log("Wibble");
+var vertx = require('vertx')
+var console = require('console')
 
 var eb = vertx.eventBus;
 
@@ -24,14 +23,14 @@ var handler = function(message) {
   }
   count++;
   if (count % batchSize == 0) {
-    // stdout.println("Received " + count);
+    // console.log("Received " + count);
     if (start == null) {
       start = new Date();
     } else {
       var now = new Date();
       var elapsed = now.getTime() - start.getTime();
       var rate = 1000 * (count + 0.0) / (elapsed);
-      stdout.println("rate: " + rate + " msgs/sec");
+      console.log("rate: " + rate + " msgs/sec");
     }
   }
 }

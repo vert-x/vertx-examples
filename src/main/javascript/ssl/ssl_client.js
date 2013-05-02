@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
-var client = vertx.createNetClient().setSSL(true).setTrustAll(true);
+var client = vertx.createNetClient().ssl(true).trustAll(true);
 
-client.connect(1234, function(sock) {
-  stdout.println("connected");
+client.connect(1234, function(err, sock) {
 
   sock.dataHandler(function(buffer) {
-    stdout.println("client receiving " + buffer.toString());
+    console.log("client receiving " + buffer.toString());
   });
 
   // Now send some data
   for (var i = 0; i < 10; i++) {
     var str = "hello" + i + "\n";
-    stdout.println("Net client sending: " + str);
+    console.log("Net client sending: " + str);
     sock.write(new vertx.Buffer(str));
   }
 });

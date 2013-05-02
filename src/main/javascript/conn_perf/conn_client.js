@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
 // We set the buffer sizes small so we don't run out of RAM - each connection
 // will have its own buffer
@@ -28,7 +29,7 @@ load('vertx.js')
 // So to really test how many connections vert.x can handle, you need to test the
 // server with multiple clients on different machines.
 
-var client = vertx.createNetClient().setSendBufferSize(2048).setReceiveBufferSize(2048);
+var client = vertx.createNetClient().sendBufferSize(2048).receiveBufferSize(2048);
 
 var numConns = 50000;
 
@@ -37,11 +38,11 @@ var received = 0;
 connect(0);
 
 function connect(num) {
-  client.connect(1234, 'localhost', function(sock) {
-    stdout.println("connected " + num);
+  client.connect(1234, 'localhost', function(err, sock) {
+    console.log("connected " + num);
 
     sock.dataHandler(function(buffer) {
-      stdout.println("received " + received);
+      console.log("received " + received);
       received++;
     });
 

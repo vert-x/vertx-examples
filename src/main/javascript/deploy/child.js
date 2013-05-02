@@ -1,7 +1,7 @@
-load('vertx.js')
+var container = require('container')
 
-var log = vertx.logger;
+var log = container.logger;
 
-log.info("in child.js, config is " + vertx.config);
+log.info("in child.js, config is " + container.config);
 
-log.info(JSON.stringify(vertx.config));
+log.info(JSON.stringify(container.config));

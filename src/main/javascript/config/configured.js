@@ -1,5 +1,4 @@
-load('vertx.js')
+var container = require('container')
+var console = require('console')
 
-var log = vertx.logger;
-
-log.info('Config is ' + JSON.stringify(vertx.config));
+console.log('Config is ' + JSON.stringify(container.config));

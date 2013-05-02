@@ -1,4 +1,4 @@
-var vertx = require('vertx.js')
+var vertx = require('vertx')
 
 vertx.createHttpServer().requestHandler(function(req) {
   req.response.end();

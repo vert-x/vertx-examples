@@ -1,11 +1,11 @@
-load('vertx.js')
+var vertx = require('vertx')
 
 var server = vertx.createHttpServer()
 
 // Serve the static resources
 server.requestHandler(function(req) {
-  if (req.uri == "/") req.response.sendFile("eventbusbridge/index.html")
-  if (req.uri == "/vertxbus.js") req.response.sendFile("eventbusbridge/vertxbus.js")
+  if (req.uri() == "/") req.response.sendFile("eventbusbridge/index.html")
+  if (req.uri() == "/vertxbus.js") req.response.sendFile("eventbusbridge/vertxbus.js")
 })
 
 // Create a SockJS bridge which lets everything through (be careful!)

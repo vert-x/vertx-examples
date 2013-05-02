@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var eb = require("event_bus");
+var console = require("console");
 
-var eb = vertx.eventBus;
-
-var address = 'example.address'
-
-var handler = function(message) {
-  stdout.println('Received message ' + message)
-}
-
-eb.registerHandler(address, handler);
-
-function vertxStop() {
-  eb.unregisterHandler(address, handler);
-}
-
+eb.registerHandler("ping-address", function(message, replier) {
+  console.log('Received message ' + message);
+  // Now reply to it
+  replier('pong!');
+});

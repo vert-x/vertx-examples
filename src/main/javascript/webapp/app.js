@@ -3,7 +3,7 @@ This verticle contains the configuration for our application and co-ordinates
 start-up of the verticles that make up the application.
  */
 
-load('vertx.js');
+var container = require('container');
 
 // Our application config - you can maintain it here or alternatively you could
 // stick it in a conf.json text file and specify that on the command line when
@@ -58,17 +58,21 @@ var webServerConf = {
 
 // Deploy a MongoDB persistor module
 
-vertx.deployModule('vertx~mongo-persistor~1.2', null, 1, function() {
+container.deployModule('io.vertx~mod-mongo-persistor~2.0.0-SNAPSHOT', function(err, deployID) {
 
   // And when it's deployed run a script to load it with some reference
   // data for the demo
-  load('static_data.js');
+  if (!err) {
+    load('static_data.js');
+  } else {
+    err.printStackTrace();
+  }
 });
 
 // Deploy an auth manager to handle the authentication
 
-vertx.deployModule('vertx~auth-mgr~1.1');
+container.deployModule('io.vertx~mod-auth-mgr~2.0.0-SNAPSHOT');
 
 // Start the web server, with the config we defined above
 
-vertx.deployModule('vertx~web-server~1.0', webServerConf);
+container.deployModule('io.vertx~mod-web-server~2.0.0-SNAPSHOT', webServerConf);

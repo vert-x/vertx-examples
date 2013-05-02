@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
 
 var conns = vertx.getSet('conns')
 
 var server = vertx.createNetServer().connectHandler(function(socket) {
-  conns.add(socket.writeHandlerID)
+  conns.add(socket.writeHandlerID())
   socket.dataHandler(function(data) {
     var aconns = conns.toArray();
     for (var i = 0; i < aconns.length; i++) {
       vertx.eventBus.send(aconns[i], data)
     }
   });
-  socket.closedHandler(function() { conns.remove(socket.writeHandlerID) });
+  socket.closeHandler(function() { conns.remove(socket.writeHandlerID()) });
 }).listen(1234)
 
 

@@ -1,14 +1,15 @@
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
 vertx.createHttpServer().requestHandler(function(req) {
-  stdout.println("Got request " + req.uri);
+  console.log("Got request " + req.uri());
 
   var hdrs = req.headers();
   for (k in hdrs) {
-    stdout.println(k + ": " + hdrs[k])
+    console.log(k + ": " + hdrs[k])
   }
 
-  req.dataHandler(function(data) { stdout.println("Got data " + data) });
+  req.dataHandler(function(data) { console.log("Got data " + data) });
 
   req.endHandler(function() {
     // Now send back a response

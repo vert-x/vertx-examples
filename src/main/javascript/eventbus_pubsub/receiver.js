@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var eb = require("event_bus");
+var console = require("console");
 
-var eb = vertx.eventBus;
-
-var address = 'example.address'
-
-vertx.setPeriodic(2000, sendMessage)
-
-var count = 0
-
-function sendMessage() {
-  var msg = "some-message-" + count++;
-  eb.send(address, msg);
-  stdout.println("sent message " + msg)
-}
+eb.registerHandler("news-feed", function(message) {
+  console.log('Received news ' + message);
+});

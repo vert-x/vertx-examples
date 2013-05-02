@@ -1,14 +1,15 @@
-load('vertx.js');
+var container = require('container');
+var console = require('console');
 
 function deploy_it(count) {
-  vertx.deployVerticle('child.js', null, 1, function(deploy_id) {
+  container.deployVerticle('child.js', function(deploy_id) {
     console.log("deployed " + count);
     undeploy_it(deploy_id, count);
   });
 }
 
 function undeploy_it(deploy_id, count) {
-  vertx.undeployVerticle(deploy_id, function() {
+  container.undeployVerticle(deploy_id, function() {
     count++;
     if (count < 10) {
       deploy_it(count);

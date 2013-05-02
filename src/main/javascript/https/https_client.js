@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
-var client = vertx.createHttpClient().setPort(4443).setSSL(true).setTrustAll(true);
+var client = vertx.createHttpClient().port(4443).ssl(true).trustAll(true);
 
 client.getNow('/', function(resp) {
-  stdout.println("Got response " + resp.statusCode);
+  console.log("Got response " + resp.statusCode());
   resp.bodyHandler(function(body) {
-    stdout.println("Got data " + body);
+    console.log("Got data " + body);
   })
 });

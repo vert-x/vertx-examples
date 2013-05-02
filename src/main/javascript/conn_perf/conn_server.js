@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
 // We set the buffer sizes small so we don't run out of RAM - each connection
 // will have its own buffer
 
-var server = vertx.createNetServer().setSendBufferSize(2048).setReceiveBufferSize(2048);
+var server = vertx.createNetServer().sendBufferSize(2048).receiveBufferSize(2048);
 
 var count = 0;
 
 server.connectHandler(function(sock) {
   new vertx.Pump(sock, sock).start();
-  stdout.println("Connection " + count++);
+  console.log("Connection " + count++);
 })
 
-server.listen(1234, 'localhost');
+server.listen(1234);

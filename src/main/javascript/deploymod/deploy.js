@@ -1,9 +1,14 @@
-load("vertx.js");
+var container = require('container');
+var console = require('console');
 
 console.log("Deploying module");
 
 var conf = {"some-var" : "hello"};
 
-vertx.deployModule("org.foo.MyMod-v1.0", conf, 1, function(deploymentID) {
-  console.log("This gets called when deployment is complete, deployment id is " + deploymentID);
+container.deployModule("org.foo~my-mod~1.0", conf, 1, function(err, deploymentID) {
+  if (err) {
+    console.log("Failed to deploy: " + err);
+  } else {
+    console.log("This gets called when deployment is complete, deployment id is " + deploymentID);
+  }
 });

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
-var client = vertx.createHttpClient().setPort(8080);
+var client = vertx.createHttpClient().port(8080);
 
-var req = client.put("/someurl", function(resp) { stdout.println("Response " + resp.statusCode)});
+var req = client.put("/someurl", function(resp) { console.log("Response " + resp.statusCode())});
 var filename = "upload/upload.txt"
 vertx.fileSystem.props(filename, function(err, props) {
   var size = props.size
   req.putHeader("Content-Length", '' + size)
   vertx.fileSystem.open(filename, function(err, file) {
-    var rs = file.getReadStream()
-    var pump = new vertx.Pump(rs, req)
-    rs.endHandler(function() { req.end() });
+    var pump = new vertx.Pump(file, req)
+    file.endHandler(function() { req.end() });
     pump.start()
   });
 });

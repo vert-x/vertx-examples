@@ -215,29 +215,34 @@ vertx run sockjs/sockjs.js
 
 Then point your browser at: http://localhost:8080
 
-## EventBus
+## EventBus Point to Point
 
-A simple event bus example.
+A simple point to point event bus example.
 
-handler.js registers an event bus handler and displays a message when a message is received
+receiver.js registers an event bus handler and displays a message when a message is received
 
 sender.js sends a message every second.
 
-You can start as many of each handler and sender as you like on the same node or on different nodes of the network.
+vertx run eventbus_pointtopoint/receiver.js -cluster
 
-To run a handler
+vertx run eventbus_pointtopoint/sender.js -cluster
 
-vertx run eventbus/handler.js -cluster
+## EventBus Pub Sub
 
-vertx run eventbus/sender.js -cluster
+A simple publish subscribe event bus example.
 
-Notes:
+receiver.js registers an event bus handler and displays a message when some news is received
 
-If you are running more than one on the same node then make sure you specify a unique -cluster-port for each one.
+sender.js publishes some news every second.
 
-If you have more than one network address on your machine, select the one you want to use using -cluster-host
+You can start a few receivers
 
-You may also have to edit the '<interfaces>` element in `conf/cluster.xml` to select the interface you want to use.
+vertx run eventbus_pubsub/receiver.js -cluster
+vertx run eventbus_pubsub/receiver.js -cluster
+vertx run eventbus_pubsub/receiver.js -cluster
+
+vertx run eventbus_pubsub/sender.js -cluster
+
 
 ## Eventbus Bridge
 
@@ -302,6 +307,45 @@ vertx run eb_perf/sender.js -cluster
 And in another console:
 
 vertx run eb_perf/handler.js -cluster -cluster-port 25501
+
+## Deploy
+
+Shows how to deploy a verticle from another verticle
+
+vertx run deploy/deployer.js
+
+## Deploy mod
+
+Shows how you deploy a module from a verticle
+
+cd into the deploymod directory before running then:
+
+vertx run deploy.js
+
+## Common JS
+
+Example showing requiring of Common JS modules - an HTTP server
+
+vertx run main.js
+
+Then point your browser at http://localhost:8080
+
+## Config
+
+This example shows how you can pass configuration to a verticle
+
+vertx run config/configured.js -conf config/conf.json
+
+## eb_perf
+
+Event bus performance between different Vert.x instances
+
+Run in separate consoles:
+
+vertx run eb_perf/sender.js -cluster
+vertx run eb_perf/handler.js -cluster
+
+
 
 
 

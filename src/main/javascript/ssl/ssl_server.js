@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
 
-var server = vertx.createNetServer().setSSL(true).
-                                   setKeyStorePath('server-keystore.jks').
-                                   setKeyStorePassword('wibble');
+var server = vertx.createNetServer().ssl(true)
+  .keyStorePath('server-keystore.jks')
+  .keyStorePassword('wibble');
 
 server.connectHandler(function(sock) {
   new vertx.Pump(sock, sock).start();

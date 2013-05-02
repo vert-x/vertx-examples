@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-var vertx = require('vertx.js')
+var vertx = require('vertx')
 var console = require('console')
 
 var connCount = 0

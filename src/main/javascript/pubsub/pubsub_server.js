@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-load('vertx.js')
+var vertx = require('vertx')
+var console = require('console')
 
 vertx.createNetServer().connectHandler(function(socket) {
   var parser = new vertx.createDelimitedParser("\n", function(line) {
     line = line.toString().replace(/\s+$/,""); // rtrim
     if (line.indexOf("subscribe,") == 0) {
       var topicName = line.split(",", 2)[1]
-      stdout.println("subscribing to " + topicName);
+      console.log("subscribing to " + topicName);
       var topic = vertx.getSet(topicName);
-      topic.add(socket.writeHandlerID)
+      topic.add(socket.writeHandlerID())
     } else if (line.indexOf("unsubscribe,") == 0) {
       var topicName = line.split(",", 2)[1]
-      stdout.println("unsubscribing from " + topicName);
+      console.log("unsubscribing from " + topicName);
       var topic = vertx.getSet(topicName)
-      topic.remove(socket.writeHandlerID)
+      topic.remove(socket.writeHandlerID())
       if (topic.isEmpty()) {
         vertx.removeSet(topicName)
       }
      } else if (line.indexOf("publish,") == 0) {
       var sp = line.split(',', 3)
-      stdout.println("publishing to " + sp[1] + " with " + sp[2]);
+      console.log("publishing to " + sp[1] + " with " + sp[2]);
       var topic = vertx.getSet(sp[1])
       var tarr = topic.toArray();
       for (var i = 0; i < tarr.length; i++) {
