@@ -16,8 +16,6 @@
 
 def eb = vertx.eventBus
 
-def address = 'example.address'
-
-def handler = { message -> println "Received message ${message.body}" }
-
-eb.registerHandler(address, handler)
+eb.registerHandler("news-feed", { message ->
+  println "Received news: ${message.body()}"
+})

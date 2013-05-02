@@ -16,14 +16,18 @@
 
 package ssl
 
-vertx.createNetClient(SSL: true, trustAll: true).connect(1234) { sock ->
+vertx.createNetClient(SSL: true, trustAll: true).connect(1234) { asyncResult ->
+  if (asyncResult.succeeded) {
+    sock = asyncResult.result
+    sock.dataHandler { buff ->  println "client receiving ${buff}" }
 
-  sock.dataHandler { buff ->  println "client receiving ${buff}" }
-
-  // Now send some data
-  10.times {
-    def str = "hello $it\n"
-    println "Net client sending: $str"
-    sock << str
+    // Now send some data
+    10.times {
+      def str = "hello $it\n"
+      println "Net client sending: $str"
+      sock << str
+    }
+  } else {
+    println "Failed to connect ${asyncResult.cause}"
   }
 }

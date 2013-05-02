@@ -14,14 +14,12 @@
 * limitations under the License.
 */
 
-def conns = vertx.sharedData.getSet('conns')
-
 def eb = vertx.eventBus
 
-server = vertx.createNetServer().connectHandler { socket ->
-  conns << socket.writeHandlerID
-  socket.dataHandler { data ->
-    for (id in conns) { eb.send(id, data) }
-  }
-  socket.closeHandler { conns.remove(socket.writeHandlerID) }
-}.listen(1234)
+// Send a message every second
+
+vertx.setPeriodic(1000) {
+  eb.send("ping-address", "ping!", { reply ->
+    println "Received reply ${reply.body()}"
+  })
+}

@@ -14,14 +14,10 @@
 * limitations under the License.
 */
 
-def conns = vertx.sharedData.getSet('conns')
-
 def eb = vertx.eventBus
 
-server = vertx.createNetServer().connectHandler { socket ->
-  conns << socket.writeHandlerID
-  socket.dataHandler { data ->
-    for (id in conns) { eb.send(id, data) }
-  }
-  socket.closeHandler { conns.remove(socket.writeHandlerID) }
-}.listen(1234)
+eb.registerHandler("ping-address", { message ->
+  println "Received message: ${message.body()}"
+  // Now send back reply
+  message.reply("pong!")
+})

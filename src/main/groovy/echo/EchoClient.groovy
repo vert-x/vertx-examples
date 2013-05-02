@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-vertx.createNetClient().connect(1234, "localhost") { socket ->
+vertx.createNetClient().connect(1234, "localhost") { asyncResult ->
 
-  socket.dataHandler { buffer ->
-    println "Net client receiving: ${buffer}"
-  }
+  if (asyncResult.succeeded()) {
+    socket = asyncResult.result
+    socket.dataHandler { buffer ->
+      println "Net client receiving: ${buffer}"
+    }
 
-  // Now send some data
-  10.times {
-    String str = "hello $it\n"
-    print "Net client sending: $str"
-    socket << str
+    // Now send some data
+    10.times {
+      String str = "hello $it\n"
+      print "Net client sending: $str"
+      socket << str
+    }
+  } else {
+    println "Failed to connect ${asyncResult.cause}"
   }
 }

@@ -4,6 +4,10 @@ println "Deploying module"
 
 conf = ["some-var" : "hello"]
 
-container.deployModule("org.foo.MyMod-v1.0", conf, 1) { deploymentID ->
-  println "This gets called when deployment is complete, deployment id is $deploymentID"
+container.deployModule("io.vertx~my-mod~1.0", conf, 1) { asyncResult ->
+  if (asyncResult.succeeded()) {
+    println "This gets called when deployment is complete, deployment id is $asyncResult.result()"
+  } else {
+    println "Failed to deploy ${asyncResult.cause()}"
+  }
 }

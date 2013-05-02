@@ -24,7 +24,7 @@ def server = vertx.createHttpServer().requestHandler { req ->
     println "Proxying response: ${c_res.statusCode}"
     req.response.chunked = true
     req.response.statusCode = c_res.statusCode
-    req.response.headers << c_res.headers
+    req.response.headers.set(c_res.headers)
     c_res.dataHandler { data ->
       println "Proxying response body: $data"
       req.response << data
@@ -32,7 +32,7 @@ def server = vertx.createHttpServer().requestHandler { req ->
     c_res.endHandler { req.response.end() }
   }
   c_req.chunked = true
-  c_req.headers << req.headers
+  c_req.headers.set(req.headers)
   req.dataHandler { data ->
     println "Proxying request body ${data}"
     c_req << data

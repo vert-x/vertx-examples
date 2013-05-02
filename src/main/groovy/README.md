@@ -253,6 +253,34 @@ Then point your browser at https://localhost:8080 and start shopping! (Note it's
 
 To fully understand this example please follow the web app tutorial on the website
 
+## EventBus Point to Point
+
+A simple point to point event bus example.
+
+Receiver.groovy registers an event bus handler and displays a message when a message is received
+
+Sender.groovy sends a message every second.
+
+vertx run eventbus_pointtopoint/Receiver.groovy -cluster
+
+vertx run eventbus_pointtopoint/Sender.groovy -cluster
+
+## EventBus Pub Sub
+
+A simple publish subscribe event bus example.
+
+Receiver.groovy registers an event bus handler and displays a message when some news is received
+
+Sender.groovy publishes some news every second.
+
+You can start a few receivers
+
+vertx run eventbus_pubsub/Receiver.groovy -cluster
+vertx run eventbus_pubsub/Receiver.groovy -cluster
+vertx run eventbus_pubsub/Receiver.groovy -cluster
+
+vertx run eventbus_pubsub/Sender.groovy -cluster
+
 
 
 

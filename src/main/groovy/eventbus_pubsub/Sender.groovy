@@ -16,14 +16,8 @@
 
 def eb = vertx.eventBus
 
-def address = 'example.address'
+// Send a message every second
 
-def count = 0
-
-// Send a message every 2 seconds
-
-vertx.setPeriodic(2000) {
-  def msg = "some-message-${count++}"
-  eb.send(address, msg)
-  println "Sent message $msg"
+vertx.setPeriodic(1000) {
+  eb.publish("news-feed", "Some news!")
 }

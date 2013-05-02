@@ -26,12 +26,11 @@ fs.props(filename) { ares ->
   def props = ares.result
   println "props is ${props}"
   def size = props.size
-  req.headers["content-length"] = size
+  req.headers.set("content-length", String.valueOf(size))
   fs.open(filename) { ares2 ->
     def file = ares2.result
-    def rs = file.readStream
-    def pump = createPump(rs, req)
-    rs.endHandler { req.end() }
+    def pump = createPump(file, req)
+    file.endHandler { req.end() }
     pump.start()
   }
 }
