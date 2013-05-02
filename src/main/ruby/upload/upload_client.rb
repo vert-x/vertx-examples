@@ -24,9 +24,8 @@ FileSystem::props(filename) do |err, props|
   size = props.size
   req.put_header("Content-Length", size)
   FileSystem::open(filename) do |err, file|
-    rs = file.read_stream
-    pump = Pump.new(rs, req)
-    rs.end_handler { req.end }
+    pump = Pump.new(file, req)
+    file.end_handler { req.end }
     pump.start
   end
 end

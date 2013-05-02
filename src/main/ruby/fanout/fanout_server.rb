@@ -22,7 +22,7 @@ NetServer.new.connect_handler do |socket|
   socket.data_handler do |data|
     conns.each { |address| EventBus::send(address, data) }
   end
-  socket.closed_handler { conns.delete(socket.write_handler_id) }
+  socket.close_handler { conns.delete(socket.write_handler_id) }
 end.listen(1234)
 
 

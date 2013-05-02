@@ -23,6 +23,6 @@ server.request_handler { |req| req.response.send_file("sockjs/index.html") if re
 sjs_server = SockJSServer.new(server)
 
 # The handler for the SockJS app - we just echo data back
-sjs_server.install_app({"prefix" => "/testapp"}) { |sock| sock.data_handler{ |buff| sock.write_buffer(buff) } }
+sjs_server.install_app({"prefix" => "/testapp"}) { |sock| sock.data_handler{ |buff| sock.write(buff) } }
 
 server.listen(8080)

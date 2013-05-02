@@ -1,10 +1,13 @@
 require "vertx"
 
-
 def deploy_it(count)
-  Vertx::deploy_verticle("child.rb") do |deploy_id|
-    puts "deployed #{count}"
-    undeploy_it(deploy_id, count)
+  Vertx::deploy_verticle("child.rb") do |err, deploy_id|
+    if err
+      puts "Failed to deploy #{err}"
+    else
+      puts "deployed #{count}"
+      undeploy_it(deploy_id, count)
+    end
   end
 end
 
@@ -22,7 +25,3 @@ def undeploy_it(deploy_id, count)
 end
 
 deploy_it(0)
-
-#Vertx::deploy_verticle("child1.rb")
-#Vertx::deploy_verticle("child2.rb")
-#Vertx::deploy_verticle("child3.rb")

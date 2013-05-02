@@ -24,4 +24,4 @@ rm.get('/details/:user/:id') { |req| req.response.end("User: #{req.params['user'
 # Catch all - serve the index page
 rm.get_re('.*') { |req| req.response.send_file("route_match/index.html")}
 
-HttpServer.new.request_handler(rm).listen(8080)
+HttpServer.new.request_handler(&rm.to_proc).listen(8080)

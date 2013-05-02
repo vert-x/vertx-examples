@@ -37,5 +37,5 @@ NetServer.new.connect_handler do |socket|
       topic.each { |address| EventBus::send(address, Buffer.create_from_str(sp[2])) }
     end
   end
-  socket.data_handler(parser)
+  socket.data_handler(&parser.to_proc)
 end.listen(1234)

@@ -21,7 +21,7 @@ server = HttpServer.new.request_handler do |req|
   filename = (0...9).map { ('A'..'Z').to_a[rand(26)] }.join
   filename << ".uploaded"
   FileSystem::open(filename)do |err, file|
-    pump = Pump.new(req, file.write_stream)
+    pump = Pump.new(req, file)
     start_time = Time.now
     req.end_handler do
       file.close do

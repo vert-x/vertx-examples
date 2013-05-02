@@ -19,7 +19,7 @@ server = NetServer.new
 server.ssl = true
 server.key_store_path="server-keystore.jks"
 server.key_store_password="wibble"
-server.connect_handler { |socket| socket.data_handler { |data| socket.write_buffer(data) } }
+server.connect_handler { |socket| socket.data_handler { |data| socket.write(data) } }
 server.listen(1234)
 
 
