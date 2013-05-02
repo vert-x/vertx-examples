@@ -1,15 +1,16 @@
-load "vertx.js"
+vertx = require "vertx"
+console = require "console"
 
 client = vertx.createNetClient()
-client.connect 1234, (sock) ->
-  stdout.println "connected"
+client.connect 1234, (err, sock) ->
+
   sock.dataHandler (buffer) ->
-    stdout.println "client receiving " + buffer.toString()
+    console.log "client receiving " + buffer.toString()
 
   i = 0
 
   while i < 10
     str = "hello" + i + "\n"
-    stdout.println "Net client sending: " + str
+    console.log "Net client sending: " + str
     sock.write new vertx.Buffer(str)
     i++

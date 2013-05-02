@@ -1,6 +1,7 @@
+console = require "console"
 
-stdout.println "Flat white with one sugar."
+console.log "Flat white with one sugar."
 
 this.soy = ->
-    stdout.println "Make that a soy"
+  console.log "Make that a soy"
 

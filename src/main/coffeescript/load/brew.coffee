@@ -1,6 +1,8 @@
+console = require "console"
+
 load "load/flat_white.coffee"
 
 soy()
 
-stdout.println "All brewed!"
+console.log "All brewed!"
 
