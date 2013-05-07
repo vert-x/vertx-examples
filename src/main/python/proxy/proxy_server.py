@@ -28,7 +28,7 @@ def request_handler(req):
       req.response.put_header(header, c_res.headers[header])
     def data_handler(data):
       print "Proxying response body: %s"% data
-      req.response.write_buffer(data)
+      req.response.write(data)
     c_res.data_handler(data_handler)
 
     def end_handler(stream):
@@ -42,7 +42,7 @@ def request_handler(req):
 
   def data_handler(data):
     print "Proxying request body %s"% data
-    c_req.write_buffer(data)
+    c_req.write(data)
 
   req.data_handler(data_handler) 
 

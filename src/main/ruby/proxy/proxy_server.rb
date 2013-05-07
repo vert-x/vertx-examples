@@ -26,7 +26,7 @@ HttpServer.new.request_handler do |req|
     puts "Proxying response: #{c_res.status_code}"
     req.response.chunked = true
     req.response.status_code = c_res.status_code
-    req.response.headers.set_headers(c_res.headers)
+    req.response.headers.set_all(c_res.headers)
     c_res.data_handler do |data|
       puts "Proxying response body: #{data}"
       req.response.write(data);
@@ -34,7 +34,7 @@ HttpServer.new.request_handler do |req|
     c_res.end_handler { req.response.end }
   end
   c_req.chunked = true
-  c_req.headers.set_headers(req.headers)
+  c_req.headers.set_all(req.headers)
   req.data_handler do |data|
     puts "Proxying request body #{data}"
     c_req.write(data)

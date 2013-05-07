@@ -13,7 +13,7 @@ vertx.createHttpServer().requestHandler(function(req) {
 
   req.endHandler(function() {
     // Now send back a response
-    req.response.setChunked(true)
+    req.response.chunked(true)
 
     for (var i = 0; i < 10; i++) {
       req.response.write("server-data-chunk-" + i);
