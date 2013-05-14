@@ -271,9 +271,25 @@ vertx run eventbus_pubsub/Receiver.java -cluster
 vertx run eventbus_pubsub/Receiver.java -cluster
 vertx run eventbus_pubsub/Sender.java -cluster
 
+## simpleform
 
+A simple http server example that handles form data.
 
+To run the server:
 
+vertx run simpleform/SimpleFormServer.java
+
+Now access the form via your browser at http://localhost:8080
+
+## simpleformupload
+
+A simple http server example that handles file upload via a form
+
+To run the server:
+
+vertx run simpleform/SimpleFormUploadServer.java
+
+Now access the form via your browser at http://localhost:8080
 
 
 
