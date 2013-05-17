@@ -40,7 +40,7 @@ public class SimpleFormServer extends Verticle {
           req.response().setChunked(true);
           req.endHandler(new VoidHandler() {
             protected void handle() {
-              for (Map.Entry<String, String> entry : req.formAttributes().entrySet()) {
+              for (Map.Entry<String, String> entry : req.formAttributes()) {
                 req.response().write("Got attr " + entry.getKey() + " : " + entry.getValue() + "\n");
               }
               req.response().end();

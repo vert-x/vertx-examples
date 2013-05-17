@@ -30,10 +30,10 @@ vertx.createHttpServer().requestHandler{ req ->
   } else if (req.uri.startsWith("/form")) {
     req.response.chunked = true
     req.endHandler {
-      for (Map.Entry<String, String> entry : req.formAttributes.entrySet()) {
-        req.response.write("Got attr " + entry.key + " : " + entry.value + "\n")
-       }
-       req.response.end()
+      req.formAttributes.each { attr ->
+        req.response.write("Got attr " + attr.key + " : " + attr.value + "\n")
+      }
+      req.response.end()
     };
    } else {
      req.response.statusCode = 404
