@@ -15,7 +15,7 @@
  */
 
 var vertx = require('vertx')
-var console = require('console')
+var console = require('vertx/console')
 
 // We set the buffer sizes small so we don't run out of RAM - each connection
 // will have its own buffer

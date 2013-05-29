@@ -1,0 +1,4 @@
+{
+  "main": "org.vertx.mods.web.WebServer",
+  "preserve-cwd": true
+}

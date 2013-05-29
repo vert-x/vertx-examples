@@ -1,4 +1,4 @@
-var container = require('container')
+var container = require('vertx/container')
 
 var log = container.logger;
 

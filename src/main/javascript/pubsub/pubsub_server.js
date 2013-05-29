@@ -15,7 +15,7 @@
  */
 
 var vertx = require('vertx')
-var console = require('console')
+var console = require('vertx/console')
 
 vertx.createNetServer().connectHandler(function(socket) {
   var parser = new vertx.createDelimitedParser("\n", function(line) {
