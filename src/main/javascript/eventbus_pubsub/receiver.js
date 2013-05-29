@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-var eb = require("event_bus");
-var console = require("console");
+var eb = require("vertx/event_bus");
+var console = require("vertx/console");
 
 eb.registerHandler("news-feed", function(message) {
   console.log('Received news ' + message);

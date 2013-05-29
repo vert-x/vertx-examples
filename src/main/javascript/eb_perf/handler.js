@@ -1,5 +1,5 @@
 var vertx = require('vertx')
-var console = require('console')
+var console = require('vertx/console')
 
 var eb = vertx.eventBus;
 
@@ -23,7 +23,7 @@ var handler = function(message) {
   }
   count++;
   if (count % batchSize == 0) {
-    // console.log("Received " + count);
+    console.log("Received " + count);
     if (start == null) {
       start = new Date();
     } else {

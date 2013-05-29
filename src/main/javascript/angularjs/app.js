@@ -4,7 +4,7 @@ start-up of the verticles that make up the application.
  */
 
 var vertx = require('vertx');
-var container = require('container');
+var container = require('vertx/container');
 
 // Our application config - you can maintain it here or alternatively you could
 // stick it in a conf.json text file and specify that on the command line when
@@ -63,7 +63,7 @@ container.deployModule('io.vertx~mod-mongo-persistor~2.0.0-beta1', function() {
 
   // And when it's deployed run a script to load it with some reference
   // data for the demo
-  load('static_data.js');
+  load('angularjs/static_data.js');
 });
 
 // Deploy an auth manager to handle the authentication
