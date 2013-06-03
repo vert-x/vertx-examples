@@ -15,7 +15,7 @@
  */
 
 var vertx = require('vertx')
-var console = require('console')
+var console = require('vertx/console')
 
 vertx.createHttpServer().requestHandler(function(req) {
   req.pause()

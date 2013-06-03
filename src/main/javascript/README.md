@@ -286,7 +286,7 @@ It's the same application from the tutorial.
 
 You will need an instance of MongoDB server (with default settings) running on localhost.
 
-To run it simply `cd` into the webapp directory and `vertx run App.groovy`
+To run it simply `cd` into the webapp directory and `vertx run app.js`
 
 To see log output set the following in `conf/logging.properties`
 

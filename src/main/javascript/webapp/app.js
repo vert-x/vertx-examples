@@ -3,7 +3,7 @@ This verticle contains the configuration for our application and co-ordinates
 start-up of the verticles that make up the application.
  */
 
-var container = require('container');
+var container = require('vertx/container');
 
 // Our application config - you can maintain it here or alternatively you could
 // stick it in a conf.json text file and specify that on the command line when
@@ -63,7 +63,7 @@ container.deployModule('io.vertx~mod-mongo-persistor~2.0.0-beta1', function(err,
   // And when it's deployed run a script to load it with some reference
   // data for the demo
   if (!err) {
-    load('static_data.js');
+    load('webapp/static_data.js');
   } else {
     err.printStackTrace();
   }

@@ -15,7 +15,7 @@
  */
 
 var vertx = require('vertx')
-var console = require('console')
+var console = require('vertx/console')
 
 var client = vertx.createHttpClient().port(8080);
 
