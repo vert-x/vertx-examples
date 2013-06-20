@@ -1,0 +1,5 @@
+// This is the module descriptor - all modules must have one
+
+{
+  "main": "app.js" // Main tells Vert.x which verticle to start when the module is deployed
+}

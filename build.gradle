@@ -41,16 +41,3 @@ dependencies {
   compile "io.vertx:vertx-core:$vertxVersion"
   compile "io.vertx:vertx-platform:$vertxVersion"
 }
-
-test {
-  // Some vert.x properties
-  systemProperty 'vertx.test.timeout', 15
-  systemProperty 'vertx.mods', "$projectDir/src/test/mods"
-  systemProperty 'vertx.version', "$project.version"
-
-  // Show output
-  testLogging.showStandardStreams = true
-}
-
-test.dependsOn testClasses
-
