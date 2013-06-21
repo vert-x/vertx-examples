@@ -1,0 +1,11 @@
+{
+  "main": "org.vertx.mods.MongoPersistor",
+  "worker": true,
+  "multi-threaded": true,
+
+  "description":"MongoDB persistor module for Vert.x",
+  "licenses": ["The Apache Software License Version 2.0"],
+  "author": "purplefox",
+  "keywords": ["mongo", "mongodb", "database", "databases", "persistence", "json", "nosql"],
+  "homepage": "https://github.com/vert-x/mod-mongo-persistor"
+}
