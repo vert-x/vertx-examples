@@ -29,33 +29,35 @@ var albums = [
   }
 ];
 
-// First delete everything
+// First delete albums
 
-eb.send(pa, {action: 'delete', collection: 'albums', matcher: {}});
+eb.send(pa, {action: 'delete', collection: 'albums', matcher: {}}, function() {
+  // Insert albums - in real life price would probably be stored in a different collection, but, hey, this is a demo.
 
-eb.send(pa, {action: 'delete', collection: 'users', matcher: {}});
+  for (var i = 0; i < albums.length; i++) {
+    eb.send(pa, {
+      action: 'save',
+      collection: 'albums',
+      document: albums[i]
+    });
+  }
+});
 
-// Insert albums - in real life price would probably be stored in a different collection, but, hey, this is a demo.
+// Delete users
 
+eb.send(pa, {action: 'delete', collection: 'users', matcher: {}}, function() {
 
-for (var i = 0; i < albums.length; i++) {
+  // And insert a user
+
   eb.send(pa, {
     action: 'save',
-    collection: 'albums',
-    document: albums[i]
+    collection: 'users',
+    document: {
+      firstname: 'Tim',
+      lastname: 'Fox',
+      email: 'tim@localhost.com',
+      username: 'tim',
+      password: 'password'
+    }
   });
-}
-
-// And a user
-
-eb.send(pa, {
-  action: 'save',
-  collection: 'users',
-  document: {
-    firstname: 'Tim',
-    lastname: 'Fox',
-    email: 'tim@localhost.com',
-    username: 'tim',
-    password: 'password'
-  }
 });

@@ -33,30 +33,34 @@ albums = [
 
 # First delete everything
 
-eb.send(pa, {'action' => 'delete', 'collection' => 'albums', 'matcher' => {}});
+eb.send(pa, {'action' => 'delete', 'collection' => 'albums', 'matcher' => {}}) do
+  eb.send(pa, {'action' => 'delete', 'collection' => 'users', 'matcher' => {}}) do
+    # Insert albums - in real life 'price' would probably be stored in a different collection, but, hey, this is a demo.
 
-eb.send(pa, {'action' => 'delete', 'collection' => 'users', 'matcher' => {}});
-
-# Insert albums - in real life 'price' would probably be stored in a different collection, but, hey, this is a demo.
-
-(1..albums.length).each do |i|
-  eb.send(pa, {
-    'action' => 'save',
-    'collection' => 'albums',
-    'document' => albums[i - 1]
-  })
-end
+    (1..albums.length).each do |i|
+      eb.send(pa, {
+          'action' => 'save',
+          'collection' => 'albums',
+          'document' => albums[i - 1]
+      })
+    end
 
 # And a user
 
-eb.send(pa, {
-  'action' => 'save',
-  'collection' => 'users',
-  'document' => {
-    'firstname' => 'Tim',
-    'lastname' => 'Fox',
-    'email' => 'tim@localhost.com',
-    'username' => 'tim',
-    'password' => 'password'
-  }
-})
+    eb.send(pa, {
+        'action' => 'save',
+        'collection' => 'users',
+        'document' => {
+            'firstname' => 'Tim',
+            'lastname' => 'Fox',
+            'email' => 'tim@localhost.com',
+            'username' => 'tim',
+            'password' => 'password'
+        }
+    })
+  end
+end
+
+
+
+

@@ -46,32 +46,38 @@ def albums = [
   ]
 ]
 
-// First delete everything
+// First delete albums
 
-eb.send(pa, ['action': 'delete', 'collection': 'albums', 'matcher': [:]])
+eb.send(pa, ['action': 'delete', 'collection': 'albums', 'matcher': [:]]) {
 
-eb.send(pa, ['action': 'delete', 'collection': 'users', 'matcher': [:]])
+  // Insert albums - in real life price would probably be stored in a different collection, but, hey, this is a demo.
 
-// Insert albums - in real life price would probably be stored in a different collection, but, hey, this is a demo.
+  for (album in albums) {
+    eb.send(pa, [
+        'action': 'save',
+        'collection': 'albums',
+        'document': album
+    ])
+  }
 
-for (album in albums) {
-  eb.send(pa, [
-    'action': 'save',
-    'collection': 'albums',
-    'document': album
-  ])
 }
 
-// And a user
 
-eb.send(pa, [
-  'action': 'save',
-  'collection': 'users',
-  'document': [
-    'firstname': 'Tim',
-    'lastname': 'Fox',
-    'email': 'tim@localhost.com',
-    'username': 'tim',
-    'password': 'password'
-  ]
-])
+// Delete users
+
+eb.send(pa, ['action': 'delete', 'collection': 'users', 'matcher': [:]])  {
+
+  // Then add a user
+
+  eb.send(pa, [
+    'action': 'save',
+    'collection': 'users',
+    'document': [
+      'firstname': 'Tim',
+      'lastname': 'Fox',
+      'email': 'tim@localhost.com',
+      'username': 'tim',
+      'password': 'password'
+    ]
+  ])
+}

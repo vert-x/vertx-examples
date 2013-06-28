@@ -5,4 +5,4 @@ AngularJS
 
 To run:
 
-    vertx runmod io.vertx~example~web-app~1.0
+    vertx runmod io.vertx~example-web-app~1.0

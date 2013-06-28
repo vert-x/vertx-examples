@@ -52,16 +52,16 @@ web_server_conf = {
 # data for the demov
 def deploy_handler(err, id):
     if err is None:
-        execfile('static_data.py')
+        load('static_data.py')
     else:
         print 'Failed to deploy %s' % err
 
 # Now we deploy the modules that we need
 # Deploy a MongoDB persistor module
-vertx.deploy_module('io.vertx~mod-mongo-persistor~2.0.0-beta1', handler=deploy_handler)
+vertx.deploy_module('io.vertx~mod-mongo-persistor~2.0.0-CR2', handler=deploy_handler)
 
 # Deploy an auth manager to handle the authentication
-vertx.deploy_module('io.vertx~mod-auth-mgr~2.0.0-beta1')
+vertx.deploy_module('io.vertx~mod-auth-mgr~2.0.0-CR2')
 
 # Start the web server, with the config we defined above
-vertx.deploy_module('io.vertx~mod-web-server~2.0.0-beta1', web_server_conf)
+vertx.deploy_module('io.vertx~mod-web-server~2.0.0-CR2', web_server_conf)

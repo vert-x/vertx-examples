@@ -42,8 +42,6 @@ eb.send(pa, {action: 'delete', collection: 'albums', matcher: {}}, function(repl
         action: 'save',
         collection: 'albums',
         document: albums[i]
-      }, function(reply) {
-        console.log("reply:" + reply.status)
       });
     }
 

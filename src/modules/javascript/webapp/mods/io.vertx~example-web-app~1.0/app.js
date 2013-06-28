@@ -7,9 +7,6 @@ var container = require('vertx/container');
 
 var console = require('vertx/console');
 
-console.log("curr dir is:" + new java.io.File(".").getAbsolutePath())
-
-
 // Our application config - you can maintain it here or alternatively you could
 // stick it in a conf.json text file and specify that on the command line when
 // starting this verticle
@@ -63,7 +60,7 @@ var webServerConf = {
 
 // Deploy a MongoDB persistor module
 
-container.deployModule('io.vertx~mod-mongo-persistor~2.0.0-CR1', function(err, deployID) {
+container.deployModule('io.vertx~mod-mongo-persistor~2.0.0-CR2', function(err, deployID) {
 
   // And when it's deployed run a script to load it with some reference
   // data for the demo
@@ -76,8 +73,8 @@ container.deployModule('io.vertx~mod-mongo-persistor~2.0.0-CR1', function(err, d
 
 // Deploy an auth manager to handle the authentication
 
-container.deployModule('io.vertx~mod-auth-mgr~2.0.0-CR1');
+container.deployModule('io.vertx~mod-auth-mgr~2.0.0-CR2');
 
 // Start the web server, with the config we defined above
 
-container.deployModule('io.vertx~mod-web-server~2.0.0-CR1', webServerConf);
+container.deployModule('io.vertx~mod-web-server~2.0.0-CR2', webServerConf);
