@@ -1,4 +1,5 @@
 import vertx
+from core.event_bus import EventBus
 
 # Our application config - you can maintain it here or alternatively you could
 # stick it in a conf.json text file and specify that on the command line when
@@ -52,7 +53,8 @@ web_server_conf = {
 # data for the demov
 def deploy_handler(err, id):
     if err is None:
-        load('static_data.py')
+        # Load the static data
+        import static_data
     else:
         print 'Failed to deploy %s' % err
 

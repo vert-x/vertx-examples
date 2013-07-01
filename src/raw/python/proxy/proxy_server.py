@@ -31,7 +31,7 @@ def request_handler(req):
       req.response.write(data)
     c_res.data_handler(data_handler)
 
-    def end_handler(stream):
+    def end_handler():
       req.response.end()
     c_res.end_handler(end_handler)
 
@@ -46,7 +46,7 @@ def request_handler(req):
 
   req.data_handler(data_handler) 
 
-  def end_handler(stream):
+  def end_handler():
     c_req.end()
 
   req.end_handler(end_handler)

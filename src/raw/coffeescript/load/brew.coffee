@@ -1,4 +1,4 @@
-console = require "console"
+console = require "vertx/console"
 
 load "load/flat_white.coffee"
 

@@ -24,7 +24,7 @@ vertx.createHttpServer().requestHandler(function(req) {
     var pump = new vertx.Pump(req, file)
     req.endHandler(function() {
       file.close(function() {
-        console.log("Uploaded " + pump.getBytesPumped() + " bytes to " + filename);
+        console.log("Uploaded " + pump.bytesPumped() + " bytes to " + filename);
         req.response.end();
       });
     });

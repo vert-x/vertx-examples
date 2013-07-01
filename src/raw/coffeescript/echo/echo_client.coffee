@@ -1,5 +1,5 @@
 vertx = require "vertx"
-console = require "console"
+console = require "vertx/console"
 
 client = vertx.createNetClient()
 client.connect 1234, (err, sock) ->

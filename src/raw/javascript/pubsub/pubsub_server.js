@@ -18,7 +18,7 @@ var vertx = require('vertx')
 var console = require('vertx/console')
 
 vertx.createNetServer().connectHandler(function(socket) {
-  var parser = new vertx.createDelimitedParser("\n", function(line) {
+  var parser = vertx.createDelimitedParser("\n", function(line) {
     line = line.toString().replace(/\s+$/,""); // rtrim
     if (line.indexOf("subscribe,") == 0) {
       var topicName = line.split(",", 2)[1]

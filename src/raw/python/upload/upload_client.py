@@ -36,7 +36,7 @@ def file_props(err, props):
         print "in open handler"
         pump = Pump(file, req)
 
-        def end_handler(stream):
+        def end_handler():
             req.end()
         file.end_handler(end_handler)
         pump.start()

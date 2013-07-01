@@ -5,9 +5,9 @@ vertx.createHttpServer().requestHandler(function(req) {
   console.log("Got request " + req.uri());
 
   var hdrs = req.headers();
-  for (k in hdrs) {
-    console.log(k + ": " + hdrs[k])
-  }
+  hdrs.forEach(function(k, v) {
+    console.log(k + ":" + v)
+  });
 
   req.dataHandler(function(data) { console.log("Got data " + data) });
 

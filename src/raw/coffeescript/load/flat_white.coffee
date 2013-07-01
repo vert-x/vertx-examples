@@ -1,4 +1,4 @@
-console = require "console"
+console = require "vertx/console"
 
 console.log "Flat white with one sugar."
 

@@ -41,6 +41,10 @@ public class UploadServer extends Verticle {
 
         vertx.fileSystem().open(filename, new AsyncResultHandler<AsyncFile>() {
           public void handle(AsyncResult<AsyncFile> ar) {
+            if (ar.failed()) {
+              ar.cause().printStackTrace();
+              return;
+            }
             final AsyncFile file = ar.result();
             final Pump pump = Pump.createPump(req, file);
             final long start = System.currentTimeMillis();
@@ -51,7 +55,7 @@ public class UploadServer extends Verticle {
                     if (ar.succeeded()) {
                       req.response().end();
                       long end = System.currentTimeMillis();
-                      System.out.println("Uploaded " + pump.getBytesPumped() + " bytes to " + filename + " in " + (end - start) + " ms");
+                      System.out.println("Uploaded " + pump.bytesPumped() + " bytes to " + filename + " in " + (end - start) + " ms");
                     } else {
                       ar.cause().printStackTrace(System.err);
                     }

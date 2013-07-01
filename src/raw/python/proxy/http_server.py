@@ -28,7 +28,7 @@ def handle(req):
         print "Got data %s"% data
 
     @req.end_handler
-    def end_handler(stream):
+    def end_handler():
         req.response.chunked = True
         for i in range(9):
             req.response.write_str("server-data-chunk-%s"% i)

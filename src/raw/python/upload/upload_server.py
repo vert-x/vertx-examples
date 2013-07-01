@@ -39,7 +39,7 @@ def request_handler(req):
         pump = Pump(req, file)
         start_time = datetime.now()
 
-        def end_handler(stream):
+        def end_handler():
             def file_close(err, file):
                 end_time = datetime.now()
                 print "Uploaded %d bytes to %s in %s"%(pump.bytes_pumped, filename, end_time-start_time)

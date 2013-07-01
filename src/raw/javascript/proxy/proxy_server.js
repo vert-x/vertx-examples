@@ -25,7 +25,7 @@ vertx.createHttpServer().requestHandler(function(req) {
     console.log("Proxying response: " + c_res.statusCode());
     req.response.statusCode(c_res.statusCode());
     req.response.chunked(true);
-    req.response.headers().setHeaders(c_res.headers());
+    req.response.headers().setMap(c_res.headers());
     c_res.dataHandler(function(data) {
       console.log("Proxying response body: " + data);
       req.response.write(data);
@@ -33,7 +33,7 @@ vertx.createHttpServer().requestHandler(function(req) {
     c_res.endHandler(function() { req.response.end() });
   });
   c_req.chunked(true);
-  c_req.headers().setHeaders(req.headers());
+  c_req.headers().setMap(req.headers());
   req.dataHandler(function(data) {
     console.log("Proxying request body " + data);
     c_req.write(data);
