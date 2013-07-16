@@ -16,8 +16,10 @@ package echo;
  * limitations under the License.
  */
 
+import org.vertx.java.core.AsyncResult;
+import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.SimpleHandler;
+import org.vertx.java.core.VoidHandler;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.net.NetSocket;
 import org.vertx.java.platform.Verticle;
@@ -25,38 +27,42 @@ import org.vertx.java.platform.Verticle;
 public class PerfClient extends Verticle {
 
   public void start() {
-    vertx.createNetClient().connect(1234, "localhost", new Handler<NetSocket>() {
-      public void handle(NetSocket socket) {
+    vertx.createNetClient().connect(1234, "localhost", new AsyncResultHandler<NetSocket>() {
+      public void handle(AsyncResult<NetSocket> asyncResult) {
+        if (asyncResult.succeeded()) {
+            NetSocket socket = asyncResult.result();
+            final int packetSize = 32 * 1024;
+            final int batch = 1024 * 1024 * 512;
 
-        final int packetSize = 32 * 1024;
-        final int batch = 1024 * 1024 * 512;
-
-        socket.dataHandler(new Handler<Buffer>() {
-          int bytesReceived = 0;
-          long start = System.currentTimeMillis();
-          public void handle(Buffer buffer) {
-            bytesReceived += buffer.length();
-            if (bytesReceived > batch) {
-              long end = System.currentTimeMillis();
-              double rate = 1000 * (double)bytesReceived / (end - start);
-              double mbitsRate = rate * 8 / (1024 * 1024);
-              System.out.println("rate: " + rate + " bytes/sec " + mbitsRate + " Mbits/sec");
-              bytesReceived = 0;
-              start = end;
+          socket.dataHandler(new Handler<Buffer>() {
+            int bytesReceived = 0;
+            long start = System.currentTimeMillis();
+            public void handle(Buffer buffer) {
+              bytesReceived += buffer.length();
+              if (bytesReceived > batch) {
+                long end = System.currentTimeMillis();
+                double rate = 1000 * (double)bytesReceived / (end - start);
+                double mbitsRate = rate * 8 / (1024 * 1024);
+                System.out.println("rate: " + rate + " bytes/sec " + mbitsRate + " Mbits/sec");
+                bytesReceived = 0;
+                start = end;
+              }
             }
-          }
-        });
+          });
 
-        Buffer buff = new Buffer(new byte[packetSize]);
+          Buffer buff = new Buffer(new byte[packetSize]);
 
-        sendData(socket, buff);
+          sendData(socket, buff);
+        } else {
+            asyncResult.cause().printStackTrace();;
+        }
       }
     });
   }
 
   private void sendData(final NetSocket socket, final Buffer buff) {
     socket.write(buff);
-    SimpleHandler handler = new SimpleHandler() {
+    Handler<Void> handler = new VoidHandler() {
       public void handle() {
         sendData(socket, buff);
       }
