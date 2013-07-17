@@ -38,6 +38,7 @@ public class SimpleFormServer extends Verticle {
           req.response().sendFile("simpleform/index.html");
         } else if (req.uri().startsWith("/form")) {
           req.response().setChunked(true);
+          req.expectMultiPart(true);
           req.endHandler(new VoidHandler() {
             protected void handle() {
               for (Map.Entry<String, String> entry : req.formAttributes()) {

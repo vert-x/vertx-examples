@@ -24,6 +24,7 @@ vertx.createHttpServer().requestHandler { req ->
     // Serve the index page
     req.response.sendFile("simpleformupload/index.html");
   } else if (req.uri.startsWith("/form")) {
+    req.expectMultiPart = true
     req.uploadHandler { upload ->
       upload.exceptionHandler { cause ->
         req.response.end("Upload failed");

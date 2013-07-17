@@ -29,6 +29,7 @@ vertx.createHttpServer().requestHandler{ req ->
     req.response.sendFile("simpleform/index.html");
   } else if (req.uri.startsWith("/form")) {
     req.response.chunked = true
+    req.expectMultiPart = true
     req.endHandler {
       req.formAttributes.each { attr ->
         req.response.write("Got attr " + attr.key + " : " + attr.value + "\n")

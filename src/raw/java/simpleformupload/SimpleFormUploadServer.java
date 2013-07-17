@@ -33,6 +33,7 @@ public class SimpleFormUploadServer extends Verticle {
           // Serve the index page
           req.response().sendFile("simpleformupload/index.html");
         } else if (req.uri().startsWith("/form")) {
+          req.expectMultiPart(true);
           req.uploadHandler(new Handler<HttpServerFileUpload>() {
             @Override
             public void handle(final HttpServerFileUpload upload) {

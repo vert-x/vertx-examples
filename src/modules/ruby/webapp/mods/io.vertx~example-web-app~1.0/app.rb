@@ -53,7 +53,7 @@ web_server_conf = {
 
 # Deploy a MongoDB persistor module
 
-Vertx.deploy_module('io.vertx~mod-mongo-persistor~2.0.0-CR2') do
+Vertx.deploy_module('io.vertx~mod-mongo-persistor~2.0.0-final') do
 
   # And when it's deployed run a script to load it with some reference
   # data for the demo
@@ -62,8 +62,8 @@ end
 
 # Deploy an auth manager to handle the authentication
 
-Vertx.deploy_module('io.vertx~mod-auth-mgr~2.0.0-CR2')
+Vertx.deploy_module('io.vertx~mod-auth-mgr~2.0.0-final')
 
 # Start the web server, with the config we defined above
 
-Vertx.deploy_module('io.vertx~mod-web-server~2.0.0-CR2', web_server_conf)
+Vertx.deploy_module('io.vertx~mod-web-server~2.0.0-final', web_server_conf)
