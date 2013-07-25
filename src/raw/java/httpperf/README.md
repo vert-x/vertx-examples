@@ -26,7 +26,7 @@ Run the server in another console (give it 6 instances to utilise the cores on t
 
 Run the client in another console:
 
-`vertx httpperf/PerfClient.java -instances 6 -cluster`
+`vertx run httpperf/PerfClient.java -instances 6 -cluster`
 
 Of course, you can run client and server on different machines. You'll probably need a fast network to avoid getting IO bound.
 
