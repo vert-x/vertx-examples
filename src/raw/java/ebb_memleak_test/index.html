@@ -1,0 +1,62 @@
+<html>
+<head>
+  <title></title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.4.min.js"></script>
+  <script src="vertxbus.js"></script>
+</head>
+
+<body>
+
+<div id="status" >
+  <input type="button" id="startButton" value="Start test"/><br>
+  Connections: <div id="status_info">0</div>
+</div>
+
+<script>
+
+  var count = 0;
+  var eb = null;
+
+  // var protocols = ['websocket', 'xdr-streaming', 'xhr-streaming', 'iframe-eventsource', 'iframe-htmlfile', 'xdr-polling', 'xhr-polling', 'iframe-xhr-polling', 'jsonp-polling'];
+  var protocols = ['xhr-polling'];
+  var options = {protocols_whitelist: protocols, debug: false, jsessionid: false};
+
+  function openConn() {
+    if (!eb) {
+      eb = new vertx.EventBus("http://localhost:8080/eventbus", options);
+
+      eb.onopen = function() {
+        $("#status_info").text("Connected");
+
+        doSend();
+      };
+
+      eb.onclose = function() {
+        $("#status_info").text("Connected: " + count++);
+        eb = null;
+        openConn();
+      };
+
+      function doSend() {
+        eb.registerHandler("foobar", function(msg) {
+          console.log("got message");
+          eb.close();
+        });
+
+        eb.send("foobar", "somemessage");
+      }
+    }
+  }
+
+  $(document).ready(function() {
+
+    $("#startButton").click(function() {
+      openConn();
+    });
+  });
+
+</script>
+
+</body>
+</html>
