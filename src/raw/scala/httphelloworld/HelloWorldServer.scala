@@ -22,7 +22,7 @@ import org.vertx.scala.platform.Verticle
 class HelloWorldServer extends Verticle {
 
   override def start() {
-    vertx.newHttpServer.requestHandler { req: HttpServerRequest =>
+    vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
       req.response.end("Hello Scala World!")
     }.listen(8080)
   }
