@@ -1,5 +1,7 @@
 package eventbusbridge;
 
+import org.vertx.java.core.AsyncResult;
+import org.vertx.java.core.Handler;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.logging.Logger;
 import org.vertx.java.core.sockjs.EventBusBridgeHook;
@@ -10,6 +12,19 @@ public class ServerHook implements EventBusBridgeHook {
 
   public ServerHook(Logger logger) {
     this.logger = logger;
+  }
+
+  @Override
+  public boolean handleSocketCreated(SockJSSocket sock) {
+    // You can do things in here like check the Origin of the request
+    String origin = sock.headers().get("origin");
+    logger.info("Origin is " + origin);
+    if (origin == null || !origin.equals("http://localhost:8080")) {
+      // Reject the socket
+      return false;
+    } else {
+      return true;
+    }
   }
 
   /**
@@ -61,6 +76,11 @@ public class ServerHook implements EventBusBridgeHook {
   public boolean handleUnregister(SockJSSocket sock, String address) {
     logger.info("handleUnregister, sock = " + sock + ", address = " + address);
     return true;
+  }
+
+  @Override
+  public boolean handleAuthorise(JsonObject message, String sessionID, Handler<AsyncResult<Boolean>> handler) {
+    return false;
   }
 
 }
