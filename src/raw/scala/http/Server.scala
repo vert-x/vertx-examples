@@ -13,18 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package httphelloworld
 
-import org.vertx.scala.core._
-import org.vertx.scala.core.http.HttpServerRequest
-import org.vertx.scala.platform.Verticle
-
-class HelloWorldServer extends Verticle {
-
-  override def start() {
-    vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-      req.response.end("Hello Scala World!")
-    }.listen(8080)
-  }
-
-}
+vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
+  req.response.end("This is a Verticle script")
+}.listen(8080)
