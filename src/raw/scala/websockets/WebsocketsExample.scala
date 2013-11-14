@@ -1,4 +1,4 @@
-package http;
+package websockets;
 
 /*
  * Copyright 2013 the original author or authors.
@@ -16,25 +16,24 @@ package http;
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
-
 import org.vertx.scala.platform.Verticle
+import org.vertx.scala.core.http.ServerWebSocket
+import org.vertx.scala.core.buffer.Buffer
 import org.vertx.scala.core.http.HttpServerRequest
-import scala.collection.JavaConversions._
 
-class ServerExample extends Verticle {
+class WebsocketsExample extends Verticle {
 
   override def start() {
-    vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-        println("Got request: " + req.uri())
-        println("Headers are: ")
-        for(entry <- req.headers.entries()) {
-          println(entry.getKey() + ":" + entry.getValue())
-        }
-        req.response.headers.set("Content-Type", "text/html; charset=UTF-8")
-        req.response.end("<html><body><h1>Hello from vert.x!</h1></body></html>") 
+    vertx.createHttpServer().websocketHandler({ ws: ServerWebSocket =>
+      if (ws.path().equals("/myapp")) {
+        ws.dataHandler({ data: Buffer =>
+          ws.writeTextFrame(data.toString()) // Echo it back
+        })
+      } else {
+        ws.reject()
+      }
+    }).requestHandler({ req: HttpServerRequest =>
+      if (req.path().equals("/")) req.response().sendFile("websockets/ws.html") // Serve the html
     }).listen(8080)
   }
 }

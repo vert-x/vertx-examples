@@ -1,4 +1,4 @@
-package http;
+package simpleform;
 
 /*
  * Copyright 2013 the original author or authors.
@@ -16,25 +16,30 @@ package http;
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
-
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.http.HttpServerRequest
 import scala.collection.JavaConversions._
 
-class ServerExample extends Verticle {
+class SimpleFormServer extends Verticle {
 
   override def start() {
     vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-        println("Got request: " + req.uri())
-        println("Headers are: ")
-        for(entry <- req.headers.entries()) {
-          println(entry.getKey() + ":" + entry.getValue())
-        }
-        req.response.headers.set("Content-Type", "text/html; charset=UTF-8")
-        req.response.end("<html><body><h1>Hello from vert.x!</h1></body></html>") 
+      if (req.uri().equals("/")) {
+        // Serve the index page
+        req.response().sendFile("simpleform/index.html")
+      } else if (req.uri().startsWith("/form")) {
+        req.response().setChunked(true)
+        req.expectMultiPart(true)
+        req.endHandler({
+          for (entry <- req.formAttributes()) {
+            req.response().write("Got attr " + entry.getKey() + " : " + entry.getValue() + "\n")
+          }
+          req.response().end()
+        })
+      } else {
+        req.response().setStatusCode(404)
+        req.response().end()
+      }
     }).listen(8080)
   }
 }

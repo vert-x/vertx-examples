@@ -1,4 +1,4 @@
-package http;
+package proxy;
 
 /*
  * Copyright 2013 the original author or authors.
@@ -16,25 +16,30 @@ package http;
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
-
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.http.HttpServerRequest
+import org.vertx.scala.core.buffer.Buffer
 import scala.collection.JavaConversions._
 
-class ServerExample extends Verticle {
+class Server extends Verticle {
 
   override def start() {
-    vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-        println("Got request: " + req.uri())
-        println("Headers are: ")
-        for(entry <- req.headers.entries()) {
-          println(entry.getKey() + ":" + entry.getValue())
-        }
-        req.response.headers.set("Content-Type", "text/html; charset=UTF-8")
-        req.response.end("<html><body><h1>Hello from vert.x!</h1></body></html>") 
-    }).listen(8080)
+    vertx.createHttpServer().requestHandler({ req: HttpServerRequest =>
+      println("Got request: " + req.uri())
+      println("Headers are: ")
+
+      for (entry <- req.headers.entries()) {
+        println(entry.getKey() + ":" + entry.getValue())
+      }
+      req.dataHandler({ data: Buffer =>
+        println("Got data: " + data)
+      })
+      req.endHandler({
+        req.response().setChunked(true)
+        //Now we got everything, send back some data
+        (0 until 10) map { i => req.response.write("server-data-chunk" + i) }
+        req.response().end()
+      })
+    }).listen(8282)
   }
 }

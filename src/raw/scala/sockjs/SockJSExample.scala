@@ -1,4 +1,4 @@
-package http;
+package sockjs;
 
 /*
  * Copyright 2013 the original author or authors.
@@ -16,25 +16,28 @@ package http;
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
-
 import org.vertx.scala.platform.Verticle
 import org.vertx.scala.core.http.HttpServerRequest
-import scala.collection.JavaConversions._
+import org.vertx.scala.core.json.Json
+import org.vertx.scala.core.sockjs.SockJSSocket
+import org.vertx.scala.core.buffer.Buffer
 
-class ServerExample extends Verticle {
+class SockJSExample extends Verticle {
 
   override def start() {
-    vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-        println("Got request: " + req.uri())
-        println("Headers are: ")
-        for(entry <- req.headers.entries()) {
-          println(entry.getKey() + ":" + entry.getValue())
-        }
-        req.response.headers.set("Content-Type", "text/html; charset=UTF-8")
-        req.response.end("<html><body><h1>Hello from vert.x!</h1></body></html>") 
-    }).listen(8080)
+    val server = vertx.createHttpServer()
+
+    server.requestHandler({ req: HttpServerRequest =>
+      if (req.path().equals("/")) req.response().sendFile("sockjs/index.html") // Serve the html
+    })
+
+    val sockServer = vertx.createSockJSServer(server)
+
+    sockServer.installApp(Json.obj("prefix" -> "/testapp"), { sock: SockJSSocket =>
+      sock.dataHandler({ data: Buffer =>
+        sock.write(data) // Echo it back
+      })
+    })
+    server.listen(8080)
   }
 }
