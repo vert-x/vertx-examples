@@ -1,5 +1,3 @@
-package sendfile;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,21 +14,13 @@ package sendfile;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpServerRequest
+val webroot = "sendfile/"
 
-class SendFileExample extends Verticle {
-
-  val webroot = "sendfile/"
-
-  override def start() {
-    vertx.createHttpServer().requestHandler({ req: HttpServerRequest =>
-      if (req.path().equals("/")) {
-        req.response().sendFile(webroot + "index.html")
-      } else {
-        //Clearly in a real server you would check the path for better security!!
-        req.response().sendFile(webroot + req.path())
-      }
-    }).listen(8080)
+vertx.createHttpServer().requestHandler({ req: HttpServerRequest =>
+  if (req.path().equals("/")) {
+    req.response().sendFile(webroot + "index.html")
+  } else {
+    //Clearly in a real server you would check the path for better security!!
+    req.response().sendFile(webroot + req.path())
   }
-}
+}).listen(8080)

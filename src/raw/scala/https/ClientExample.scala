@@ -1,5 +1,3 @@
-package https;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,17 +14,8 @@ package https;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpClientResponse
-import org.vertx.scala.core.buffer.Buffer
-
-class ClientExample extends Verticle {
-
-  override def start() {
-    vertx.createHttpClient.setSSL(true).setTrustAll(true).setPort(4443).setHost("localhost").getNow("/", { response: HttpClientResponse =>
-      response.dataHandler({ data: Buffer =>
-        println(data)
-      })
-    })
-  }
-}
+vertx.createHttpClient.setSSL(true).setTrustAll(true).setPort(8080).setHost("localhost").getNow("/", { response: HttpClientResponse =>
+  response.dataHandler({ data: Buffer =>
+    container.logger.info(data)
+  })
+})

@@ -1,13 +1,11 @@
-package upload;
-
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,58 +14,35 @@ package upload;
  * limitations under the License.
  */
 
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.core.AsyncResultHandler;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.VoidHandler;
-import org.vertx.java.core.file.AsyncFile;
-import org.vertx.java.core.http.HttpServerRequest;
-import org.vertx.java.core.streams.Pump;
-import org.vertx.java.platform.Verticle;
+import java.util.UUID
 
-import java.util.UUID;
+vertx.createHttpServer().requestHandler({ req: HttpServerRequest =>
 
-public class UploadServer extends Verticle {
+  // We first pause the request so we don't receive any data between now and when the file is opened
+  req.pause()
 
-  public void start() {
+  val filename = "upload/file-" + UUID.randomUUID().toString() + ".upload"
 
-    vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
-      public void handle(final HttpServerRequest req) {
-
-        // We first pause the request so we don't receive any data between now and when the file is opened
-        req.pause();
-
-        final String filename = "upload/file-" + UUID.randomUUID().toString() + ".upload";
-
-        vertx.fileSystem().open(filename, new AsyncResultHandler<AsyncFile>() {
-          public void handle(AsyncResult<AsyncFile> ar) {
-            if (ar.failed()) {
-              ar.cause().printStackTrace();
-              return;
-            }
-            final AsyncFile file = ar.result();
-            final Pump pump = Pump.createPump(req, file);
-            final long start = System.currentTimeMillis();
-            req.endHandler(new VoidHandler() {
-              public void handle() {
-                file.close(new AsyncResultHandler<Void>() {
-                  public void handle(AsyncResult<Void> ar) {
-                    if (ar.succeeded()) {
-                      req.response().end();
-                      long end = System.currentTimeMillis();
-                      System.out.println("Uploaded " + pump.bytesPumped() + " bytes to " + filename + " in " + (end - start) + " ms");
-                    } else {
-                      ar.cause().printStackTrace(System.err);
-                    }
-                  }
-                });
-              }
-            });
-            pump.start();
-            req.resume();
+  vertx.fileSystem.open(filename, { ar: AsyncResult[AsyncFile] =>
+    if (ar.failed()) {
+      ar.cause().printStackTrace()
+    } else {
+      val file = ar.result()
+      val pump = Pump.createPump(req, file)
+      val start = System.currentTimeMillis
+      req.endHandler({
+        file.close({ ar: AsyncResult[Void] =>
+          if (ar.succeeded()) {
+            req.response().end()
+            val end = System.currentTimeMillis
+            container.logger.info("Uploaded " + pump.bytesPumped() + " bytes to " + filename + " in " + (end - start) + " ms")
+          } else {
+            ar.cause().printStackTrace(System.err)
           }
-        });
-      }
-    }).listen(8080);
-  }
-}
+        })
+      })
+      pump.start()
+      req.resume()
+    }
+  })
+}).listen(8080)

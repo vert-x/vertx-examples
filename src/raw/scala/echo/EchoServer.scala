@@ -1,5 +1,3 @@
-package echo;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,15 +14,6 @@ package echo;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.net.NetSocket
-import org.vertx.scala.core.streams.Pump
-
-class EchoServer extends Verticle {
-
-  override def start() {
-    vertx.createNetServer.connectHandler({ socket: NetSocket =>
-      Pump.createPump(socket, socket).start()
-    }).listen(1234)
-  }
-}
+vertx.createNetServer.connectHandler({ socket: NetSocket =>
+  Pump.createPump(socket, socket).start()
+}).listen(8080)

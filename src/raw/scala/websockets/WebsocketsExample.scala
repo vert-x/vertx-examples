@@ -1,5 +1,3 @@
-package websockets;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,24 +14,14 @@ package websockets;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.ServerWebSocket
-import org.vertx.scala.core.buffer.Buffer
-import org.vertx.scala.core.http.HttpServerRequest
-
-class WebsocketsExample extends Verticle {
-
-  override def start() {
-    vertx.createHttpServer().websocketHandler({ ws: ServerWebSocket =>
-      if (ws.path().equals("/myapp")) {
-        ws.dataHandler({ data: Buffer =>
-          ws.writeTextFrame(data.toString()) // Echo it back
-        })
-      } else {
-        ws.reject()
-      }
-    }).requestHandler({ req: HttpServerRequest =>
-      if (req.path().equals("/")) req.response().sendFile("websockets/ws.html") // Serve the html
-    }).listen(8080)
+vertx.createHttpServer().websocketHandler({ ws: ServerWebSocket =>
+  if (ws.path().equals("/myapp")) {
+    ws.dataHandler({ data: Buffer =>
+      ws.writeTextFrame(data.toString()) // Echo it back
+    })
+  } else {
+    ws.reject()
   }
-}
+}).requestHandler({ req: HttpServerRequest =>
+  if (req.path().equals("/")) req.response().sendFile("websockets/ws.html") // Serve the html
+}).listen(8080)

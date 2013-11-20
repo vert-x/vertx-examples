@@ -1,13 +1,11 @@
-package upload;
-
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,73 +14,38 @@ package upload;
  * limitations under the License.
  */
 
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.core.AsyncResultHandler;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.VoidHandler;
-import org.vertx.java.core.file.AsyncFile;
-import org.vertx.java.core.http.HttpClient;
-import org.vertx.java.core.http.HttpClientRequest;
-import org.vertx.java.core.http.HttpClientResponse;
-import org.vertx.java.core.streams.Pump;
-import org.vertx.java.platform.Verticle;
+import java.nio.file.Files
+import java.nio.file.Paths
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+val client = vertx.createHttpClient.setPort(8080).setHost("localhost")
 
-public class UploadClient extends Verticle {
+    val req = client.put("/some-url", { response: HttpClientResponse =>
+        container.logger.info("File uploaded " + response.statusCode())
+    })
 
-  public void start() {
-
-    HttpClient client = vertx.createHttpClient().setPort(8080).setHost("localhost");
-
-    final HttpClientRequest req = client.put("/some-url", new Handler<HttpClientResponse>() {
-      public void handle(HttpClientResponse response) {
-        System.out.println("File uploaded " + response.statusCode());
-      }
-    });
-
-    String filename = "upload/upload.txt";
+    val filename = "upload/upload.txt"
 
     // For a non-chunked upload you need to specify size of upload up-front
-    try {
-      req.headers().set("Content-Length", String.valueOf(Files.size(Paths.get(filename))));
+
+      req.headers().set("Content-Length", String.valueOf(Files.size(Paths.get(filename))))
 
       // For a chunked upload you don't need to specify size, just do:
       // req.setChunked(true);
 
-      vertx.fileSystem().open(filename, new AsyncResultHandler<AsyncFile>() {
-        public void handle(AsyncResult<AsyncFile> ar) {
-          final AsyncFile file = ar.result();
-          Pump pump = Pump.createPump(file, req);
-          pump.start();
+      vertx.fileSystem.open(filename, { ar: AsyncResult[AsyncFile] =>
+          val file = ar.result()
+          val pump = Pump.createPump(file, req)
+          pump.start()
 
-          file.endHandler(new VoidHandler() {
-            public void handle() {
-
-              file.close(new AsyncResultHandler<Void>() {
-                public void handle(AsyncResult<Void> ar) {
+          file.endHandler({
+              file.close({ ar: AsyncResult[Void] =>
                   if (ar.succeeded()) {
-                    req.end();
-                    System.out.println("Sent request");
+                    req.end()
+                    container.logger.info("Sent request")
                   } else {
-                    ar.cause().printStackTrace(System.err);
+                    ar.cause().printStackTrace(System.err)
                   }
-                }
-              });
-            }
-          });
-        }
-
-        public void onException(Exception e) {
-          e.printStackTrace();
-        }
-      });
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-  }
-}
+              })
+          })
+         
+      })

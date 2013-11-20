@@ -1,5 +1,3 @@
-package https;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,24 +14,17 @@ package https;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpServerRequest
 import scala.collection.JavaConversions._
 
-class ServerExample extends Verticle {
+vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
+  container.logger.info("Got request: " + req.uri())
+  container.logger.info("Headers are: ")
 
-  override def start() {
-    vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-      println("Got request: " + req.uri())
-      println("Headers are: ")
-
-      for(entry <- req.headers.entries()) {
-        println(entry.getKey() + ":" + entry.getValue())
-      }
-      req.response.headers().set("Content-Type", "text/html; charset=UTF-8")
-      req.response.setChunked(true)
-      req.response.write("<html><body><h1>Hello from vert.x!</h1></body></html>", "UTF-8").end()
-
-    }).setSSL(true).setKeyStorePath("server-keystore.jks").setKeyStorePassword("wibble").listen(4443)
+  for (entry <- req.headers.entries()) {
+    container.logger.info(entry.getKey() + ":" + entry.getValue())
   }
-}
+
+  req.response.headers().set("Content-Type", "text/html; charset=UTF-8")
+  req.response.setChunked(true)
+  req.response.write("<html><body><h1>Hello from vert.x!</h1></body></html>", "UTF-8").end()
+}).setSSL(true).setKeyStorePath("server-keystore.jks").setKeyStorePassword("wibble").listen(8080)

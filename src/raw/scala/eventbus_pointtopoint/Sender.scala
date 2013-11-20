@@ -1,5 +1,3 @@
-package eventbus_pointtopoint;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,17 +14,8 @@ package eventbus_pointtopoint;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.eventbus.Message
-
-class Sender extends Verticle {
-
-  override def start() {
-    // Send a ping message every second
-    vertx.setPeriodic(1000, { timerID: Long =>
-      vertx.eventBus.send("ping-address", "ping!", { reply: Message[String] =>
-        println("Received reply: " + reply.body())
-      })
-    })
-  }
-}
+vertx.setPeriodic(1000, { timerID: Long =>
+  vertx.eventBus.send("ping-address", "ping!", { reply: Message[String] =>
+    container.logger.info("Received reply: " + reply.body())
+  })
+})

@@ -1,5 +1,3 @@
-package eventbus_pointtopoint;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,16 +14,8 @@ package eventbus_pointtopoint;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.eventbus.Message
-
-class Receiver extends Verticle {
-
-  override def start() {
-    vertx.eventBus.registerHandler("ping-address", { message: Message[String] =>
-      // Reply to it
-      println("Received message: " + message.body())
-      message.reply("pong!")
-    })
-  }
-}
+vertx.eventBus.registerHandler("ping-address", { message: Message[String] =>
+  // Reply to it
+  container.logger.info("Received message: " + message.body())
+  message.reply("pong!")
+})

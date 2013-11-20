@@ -1,5 +1,3 @@
-package perf;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -17,11 +15,8 @@ package perf;
  */
 
 import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.eventbus.Message
-import org.vertx.scala.core.buffer.Buffer
-import org.vertx.scala.core.Handler
 
-class RateCounter extends Verticle with Handler[Message[Integer]] {
+class RateCounter extends Verticle with Handler[Message[Int]] { this: (Message[Int] => Unit) =>
 
   private var last: Long = 0
   private var count: Long = 0
@@ -40,14 +35,14 @@ class RateCounter extends Verticle with Handler[Message[Integer]] {
   override def start() {
     vertx.eventBus.registerHandler("rate-counter", this)
     vertx.setPeriodic(3000, { id: Long =>
-        if (last != 0) {
-          val now = System.currentTimeMillis
-          val rate = 1000 * count / (now - last)
-          val avRate = 1000 * totCount / (now - vstart)
-          count = 0
-          println((now - vstart) + " Rate: count/sec: " + rate + " Average rate: " + avRate)
-          last = now
-        }
+      if (last != 0) {
+        val now = System.currentTimeMillis
+        val rate = 1000 * count / (now - last)
+        val avRate = 1000 * totCount / (now - vstart)
+        count = 0
+        container.logger.info((now - vstart) + " Rate: count/sec: " + rate + " Average rate: " + avRate)
+        last = now
+      }
     })
   }
 }

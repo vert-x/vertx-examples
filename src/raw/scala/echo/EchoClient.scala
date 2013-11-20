@@ -1,5 +1,3 @@
-package echo;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,30 +14,20 @@ package echo;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.AsyncResult
-import org.vertx.scala.core.net.NetSocket
-import org.vertx.scala.core.buffer.Buffer
-
-class EchoClient extends Verticle {
-
-  override def start() {
-    vertx.createNetClient.connect(1234, "localhost", { asyncResult: AsyncResult[NetSocket] =>
-      if (asyncResult.succeeded()) {
-        val socket = asyncResult.result()
-        socket.dataHandler({ buffer: Buffer =>
-          println("Net client receiving: " + buffer)
-        })
-
-        //Now send some data
-        for (i <- 0 until 10) {
-          val str = "hello" + i + "\n"
-          print("Net client sending: " + str)
-          socket.write(Buffer(str))
-        }
-      } else {
-        asyncResult.cause.printStackTrace()
-      }
+vertx.createNetClient.connect(8080, "localhost", { asyncResult: AsyncResult[NetSocket] =>
+  if (asyncResult.succeeded()) {
+    val socket = asyncResult.result()
+    socket.dataHandler({ buffer: Buffer =>
+      container.logger.info("Net client receiving: " + buffer)
     })
+
+    //Now send some data
+    for (i <- 0 until 10) {
+      val str = "hello" + i + "\n"
+      container.logger.info("Net client sending: " + str)
+      socket.write(Buffer(str))
+    }
+  } else {
+    asyncResult.cause.printStackTrace()
   }
-}
+})

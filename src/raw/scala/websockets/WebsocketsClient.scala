@@ -1,5 +1,3 @@
-package websockets;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,21 +14,10 @@ package websockets;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.WebSocket
-import org.vertx.scala.core.buffer.Buffer
-
-class WebsocketsClient extends Verticle {
-
-  override def start() {
-    // Setting host as localhost is not strictly necessary as it's the default
-    vertx.createHttpClient().setHost("localhost").setPort(8080).connectWebsocket("/myapp", { websocket: WebSocket =>
-      websocket.dataHandler({ data: Buffer =>
-        println("Received " + data)
-      })
-      //Send some data
-      websocket.writeTextFrame("hello world")
-    })
-  }
-}
-
+vertx.createHttpClient().setHost("localhost").setPort(8080).connectWebsocket("/myapp", { websocket: WebSocket =>
+  websocket.dataHandler({ data: Buffer =>
+    container.logger.info("Received " + data)
+  })
+  //Send some data
+  websocket.writeTextFrame("hello world")
+})

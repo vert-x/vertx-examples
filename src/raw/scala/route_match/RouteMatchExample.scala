@@ -1,5 +1,3 @@
-package route_match;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,25 +14,15 @@ package route_match;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.RouteMatcher
-import org.vertx.scala.core.http.HttpServerRequest
+val rm = new RouteMatcher()
 
-class RouteMatchExample extends Verticle {
+rm.get("/details/:user/:id", { req: HttpServerRequest =>
+  req.response().end("User: " + req.params().get("user") + " ID: " + req.params().get("id"))
+})
 
-  override def start() {
+// Catch all - serve the index page
+rm.getWithRegEx(".*", { req: HttpServerRequest =>
+  req.response().sendFile("route_match/index.html")
+})
 
-    val rm = new RouteMatcher()
-
-    rm.get("/details/:user/:id", { req: HttpServerRequest =>
-      req.response().end("User: " + req.params().get("user") + " ID: " + req.params().get("id"))
-    })
-
-    // Catch all - serve the index page
-    rm.getWithRegEx(".*", { req: HttpServerRequest =>
-      req.response().sendFile("route_match/index.html")
-    })
-
-    vertx.createHttpServer().requestHandler(rm).listen(8080)
-  }
-}
+vertx.createHttpServer().requestHandler(rm).listen(8080)

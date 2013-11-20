@@ -1,5 +1,3 @@
-package ssl;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,17 +14,8 @@ package ssl;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.net.NetSocket
-import org.vertx.scala.core.buffer.Buffer
-
-class SSLServer extends Verticle {
-
-  override def start() {
-    vertx.createNetServer().connectHandler({ socket: NetSocket =>
-      socket.dataHandler({ buffer: Buffer =>
-        socket.write(buffer)
-      })
-    }).setSSL(true).setKeyStorePath("server-keystore.jks").setKeyStorePassword("wibble").listen(1234)
-  }
-}
+vertx.createNetServer().connectHandler({ socket: NetSocket =>
+  socket.dataHandler({ buffer: Buffer =>
+    socket.write(buffer)
+  })
+}).setSSL(true).setKeyStorePath("server-keystore.jks").setKeyStorePassword("wibble").listen(8080)

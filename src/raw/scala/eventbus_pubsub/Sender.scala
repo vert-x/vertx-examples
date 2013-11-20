@@ -1,5 +1,3 @@
-package eventbus_pubsub;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,14 +14,6 @@ package eventbus_pubsub;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-
-class Sender extends Verticle {
-
-  override def start() {
-    // Publish some news on the feed every second
-    vertx.setPeriodic(1000, { timerID: Long =>
-      vertx.eventBus.publish("news-feed", "more news!")
-    })
-  }
-}
+vertx.setPeriodic(1000, { timerID: Long =>
+  vertx.eventBus.publish("news-feed", "more news!")
+})

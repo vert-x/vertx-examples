@@ -1,0 +1,9 @@
+{
+  "main": "org.vertx.mods.AuthManager",
+
+  "description":"Simple auth-manager module for Vert.x",
+  "licenses": ["The Apache Software License Version 2.0"],
+  "author": "purplefox",
+  "keywords": ["security", "auth", "authorisation", "authorization", "authentication", "login", "session"],
+  "homepage": "https://github.com/vert-x/mod-auth-mgr"
+}

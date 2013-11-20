@@ -1,5 +1,3 @@
-package wsperf;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,24 +14,14 @@ package wsperf;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.WebSocket
+private val CONNS = 1000
+var connectCount = 0
 
-class ConnectClient extends Verticle {
+val client = vertx.createHttpClient.setPort(8080).setHost("localhost").setMaxPoolSize(CONNS)
 
-  // Number of connections to create
-  private val CONNS = 1000
-  var connectCount = 0
-
-  override def start() {
-    println("Starting perf client");
-    val client = vertx.createHttpClient().setPort(8080).setHost("localhost").setMaxPoolSize(CONNS)
-    for (i <- 0 until CONNS) {
-      println("connecting ws");
-      client.connectWebsocket("/someuri", { ws: WebSocket =>
-        connectCount += 1
-        println("ws connected: " + connectCount)
-      })
-    }
-  }
+for (i <- 0 until CONNS) {
+  client.connectWebsocket("/someuri", { ws: WebSocket =>
+    connectCount += 1
+    container.logger.info("ws connected: " + connectCount)
+  })
 }

@@ -1,5 +1,3 @@
-package sockjs;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,28 +14,19 @@ package sockjs;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpServerRequest
-import org.vertx.scala.core.json.Json
 import org.vertx.scala.core.sockjs.SockJSSocket
-import org.vertx.scala.core.buffer.Buffer
 
-class SockJSExample extends Verticle {
+val server = vertx.createHttpServer()
 
-  override def start() {
-    val server = vertx.createHttpServer()
+server.requestHandler({ req: HttpServerRequest =>
+  if (req.path().equals("/")) req.response().sendFile("sockjs/index.html") // Serve the html
+})
 
-    server.requestHandler({ req: HttpServerRequest =>
-      if (req.path().equals("/")) req.response().sendFile("sockjs/index.html") // Serve the html
-    })
+val sockServer = vertx.createSockJSServer(server)
 
-    val sockServer = vertx.createSockJSServer(server)
-
-    sockServer.installApp(Json.obj("prefix" -> "/testapp"), { sock: SockJSSocket =>
-      sock.dataHandler({ data: Buffer =>
-        sock.write(data) // Echo it back
-      })
-    })
-    server.listen(8080)
-  }
-}
+sockServer.installApp(Json.obj("prefix" -> "/testapp"), { sock: SockJSSocket =>
+  sock.dataHandler({ data: Buffer =>
+    sock.write(data) // Echo it back
+  })
+})
+server.listen(8080)

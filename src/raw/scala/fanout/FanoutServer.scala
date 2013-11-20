@@ -1,5 +1,3 @@
-package fanout;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,27 +14,21 @@ package fanout;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.net.NetSocket
 import java.util.{ Set => JSet }
-import org.vertx.scala.core.buffer.Buffer
 import scala.collection.JavaConversions._
 
-class FanoutServer extends Verticle {
+val connections: JSet[String] = vertx.sharedData.getSet("conns")
 
-  override def start() {
-    val connections: JSet[String] = vertx.sharedData.getSet("conns")
+vertx.createNetServer.connectHandler({ socket: NetSocket =>
+  connections.add(socket.writeHandlerID)
 
-    vertx.createNetServer.connectHandler({ socket: NetSocket =>
-      connections.add(socket.writeHandlerID)
-      socket.dataHandler({ buffer: Buffer =>
-        for (actorID <- connections) {
-          vertx.eventBus.publish(actorID, buffer)
-        }
-      })
-      socket.closeHandler({
-        connections.remove(socket.writeHandlerID())
-      })
-    }).listen(1234)
-  }
-}
+  socket.dataHandler({ buffer: Buffer =>
+    for (actorID <- connections) {
+      vertx.eventBus.publish(actorID, buffer)
+    }
+  })
+
+  socket.closeHandler({
+    connections.remove(socket.writeHandlerID())
+  })
+}).listen(8080)

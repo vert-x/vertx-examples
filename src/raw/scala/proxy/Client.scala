@@ -1,5 +1,3 @@
-package proxy;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,23 +14,14 @@ package proxy;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpClientResponse
-import org.vertx.scala.core.buffer.Buffer
-
-class Client extends Verticle {
-
-  override def start() {
-    val req = vertx.createHttpClient.setPort(8080).setHost("localhost").put("/some-url", { response: HttpClientResponse =>
-      response.dataHandler({ data: Buffer =>
-        println("Got response data:" + data)
-      })
-    })
-    //Write a few chunks
-    req.setChunked(true)
-    for (i <- 0 until 10) {
-      req.write("client-data-chunk-" + i)
-    }
-    req.end()
-  }
+val req = vertx.createHttpClient.setPort(8080).setHost("localhost").put("/some-url", { response: HttpClientResponse =>
+  response.dataHandler({ data: Buffer =>
+    container.logger.info("Got response data:" + data)
+  })
+})
+//Write a few chunks
+req.setChunked(true)
+for (i <- 0 until 10) {
+  req.write("client-data-chunk-" + i)
 }
+req.end()

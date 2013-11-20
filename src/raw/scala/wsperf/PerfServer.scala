@@ -1,7 +1,5 @@
-package wsperf;
-
 /*
- * Copyright 2011-2012 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +14,9 @@ package wsperf;
  * limitations under the License.
  */
 
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.http.ServerWebSocket;
-import org.vertx.java.core.streams.Pump;
-import org.vertx.java.platform.Verticle;
+  val BUFF_SIZE = 32 * 1024
 
-/**
- * @author <a href="http://tfox.org">Tim Fox</a>
- */
-public class PerfServer extends Verticle {
-
-  private static final int BUFF_SIZE = 32 * 1024;
-
-  public void start() {
     vertx.createHttpServer().setReceiveBufferSize(BUFF_SIZE).setSendBufferSize(BUFF_SIZE).setAcceptBacklog(32000).
-        websocketHandler(new Handler<ServerWebSocket>() {
-      public void handle(ServerWebSocket ws) {
-        //System.out.println("connected " + ++count);
-        Pump.createPump(ws, ws, BUFF_SIZE).start();
-      }
-    }).listen(8080, "localhost");
-  }
-}
+        websocketHandler({ ws: ServerWebSocket =>
+        Pump.createPump(ws, ws, BUFF_SIZE).start()
+    }).listen(8080, "localhost")

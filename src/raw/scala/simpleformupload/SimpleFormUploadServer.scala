@@ -1,5 +1,3 @@
-package simpleformupload;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,32 +14,25 @@ package simpleformupload;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpServerRequest
-import org.vertx.scala.core.http.HttpServerFileUpload
-import org.vertx.scala.core.Handler
+import org.vertx.scala.core.FunctionConverters._
 
-class SimpleFormUploadServer extends Verticle {
-  override def start() {
-    vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-      if (req.uri().equals("/")) {
-        // Serve the index page
-        req.response().sendFile("simpleformupload/index.html")
-      } else if (req.uri().startsWith("/form")) {
-        req.expectMultiPart(true)
-        req.uploadHandler({ upload: HttpServerFileUpload =>
-          upload.exceptionHandler({ event: Handler[Throwable] =>
-            req.response().end("Upload failed")
-          }.asInstanceOf[Handler[Throwable]])
-          upload.endHandler({ event: Handler[Void] =>
-            req.response().end("Upload successful, you should see the file in the server directory")
-          }.asInstanceOf[Handler[Void]])
-          upload.streamToFileSystem(upload.filename())
-        }.asInstanceOf[Handler[HttpServerFileUpload]])
-      } else {
-        req.response().setStatusCode(404)
-        req.response().end()
-      }
-    }).listen(8080)
+vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
+  if (req.uri().equals("/")) {
+    // Serve the index page
+    req.response().sendFile("simpleformupload/index.html")
+  } else if (req.uri().startsWith("/form")) {
+    req.expectMultiPart(true)
+    req.uploadHandler(fnToHandler({ upload: HttpServerFileUpload =>
+      upload.exceptionHandler({ event: Throwable =>
+        req.response().end("Upload failed")
+      })
+      upload.endHandler({ event: Void =>
+        req.response().end("Upload successful, you should see the file in the server directory")
+      })
+      upload.streamToFileSystem(upload.filename())
+    }))
+  } else {
+    req.response().setStatusCode(404)
+    req.response().end()
   }
-}
+}).listen(8080)

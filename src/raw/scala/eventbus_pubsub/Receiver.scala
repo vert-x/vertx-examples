@@ -1,5 +1,3 @@
-package eventbus_pubsub;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,14 +14,6 @@ package eventbus_pubsub;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.eventbus.Message
-
-class Receiver extends Verticle {
-
-  override def start() {
-    vertx.eventBus.registerHandler("news-feed", { message: Message[String] =>
-      println("Received news: " + message.body())
-    })
-  }
-}
+vertx.eventBus.registerHandler("news-feed", { message: Message[String] =>
+  container.logger.info("Received news: " + message.body())
+})

@@ -1,5 +1,3 @@
-package simpleform;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,30 +14,23 @@ package simpleform;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpServerRequest
 import scala.collection.JavaConversions._
 
-class SimpleFormServer extends Verticle {
-
-  override def start() {
-    vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-      if (req.uri().equals("/")) {
-        // Serve the index page
-        req.response().sendFile("simpleform/index.html")
-      } else if (req.uri().startsWith("/form")) {
-        req.response().setChunked(true)
-        req.expectMultiPart(true)
-        req.endHandler({
-          for (entry <- req.formAttributes()) {
-            req.response().write("Got attr " + entry.getKey() + " : " + entry.getValue() + "\n")
-          }
-          req.response().end()
-        })
-      } else {
-        req.response().setStatusCode(404)
-        req.response().end()
+vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
+  if (req.uri().equals("/")) {
+    // Serve the index page
+    req.response().sendFile("simpleform/index.html")
+  } else if (req.uri().startsWith("/form")) {
+    req.response().setChunked(true)
+    req.expectMultiPart(true)
+    req.endHandler({
+      for (entry <- req.formAttributes.entries()) {
+        req.response().write("Got attr " + entry.getKey() + " : " + entry.getValue() + "\n")
       }
-    }).listen(8080)
+      req.response().end()
+    })
+  } else {
+    req.response().setStatusCode(404)
+    req.response().end()
   }
-}
+}).listen(8080)

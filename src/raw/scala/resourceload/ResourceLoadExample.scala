@@ -1,5 +1,3 @@
-package httphelloworld;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,15 +14,9 @@ package httphelloworld;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.HttpServerRequest
+import java.net.URL
 
-class HelloWorldServer extends Verticle {
-
-  override def start() {
-    vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
-      req.response().headers().set("Content-Type", "text/plain")
-      req.response().end("Hello World")
-    }).listen(8080)
-  }
-}
+val urlBar = getClass().getClassLoader().getResource("bar.txt")
+println("bar url is: " + urlBar)
+val urlFoo = getClass().getClassLoader().getResource("foo.xml")
+println("foo url is: " + urlFoo)

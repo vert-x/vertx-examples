@@ -1,5 +1,3 @@
-package wsperf;
-
 /*
  * Copyright 2013 the original author or authors.
  *
@@ -16,20 +14,11 @@ package wsperf;
  * limitations under the License.
  */
 
-import org.vertx.scala.platform.Verticle
-import org.vertx.scala.core.http.ServerWebSocket
+val BUFF_SIZE = 32 * 1024
+var count = 0
 
-class ConnectServer extends Verticle {
-
-  private val BUFF_SIZE = 32 * 1024
-
-  var count = 0
-
-  override def start() {
-    vertx.createHttpServer().setReceiveBufferSize(BUFF_SIZE).setSendBufferSize(BUFF_SIZE).
-      websocketHandler({ ws: ServerWebSocket =>
-        count += 1
-        println("connected " + count)
-      }).listen(8080, "localhost")
-  }
-}
+vertx.createHttpServer.setReceiveBufferSize(BUFF_SIZE).setSendBufferSize(BUFF_SIZE).
+  websocketHandler({ ws: ServerWebSocket =>
+    count += 1
+    container.logger.info("connected " + count)
+  }).listen(8080, "localhost")
