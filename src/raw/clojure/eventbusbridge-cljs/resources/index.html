@@ -1,0 +1,75 @@
+<html>
+<head>
+  <title></title>
+  <script src="client.js"></script>
+</head>
+<style>
+  .box {
+    background-color: #F0F0F0;
+    border: 5px solid blue;
+    width: 400px;
+    height: 300px;
+  }
+
+  .innerbox {
+    overflow: auto;
+    border: 5px solid blue;
+    border-left: 0px;
+    border-right: 0px;
+  }
+
+  body {
+    background-color: #F0F0F0;
+  }
+</style>
+
+<body>
+
+<div id="send" class="box" style="position:absolute;left:0px;top:0px">
+
+  <form onsubmit="return false;">
+    Address:<input type="text" id="sendAddress" value="someaddress"/><br>
+    Message:<input type="text" id="sendMessage" value="Hello, World!"/>
+    <input type="button" id="sendButton" value="Send message"/>
+  </form>
+
+  <br>
+  Sent messages:<br>
+
+  <div id="sent" class="innerbox" style="width: 400px; height: 205px;">
+  </div>
+</div>
+
+<div id="subscribe" class="box" style="position:absolute;left:450px;top:0px">
+
+  <form onsubmit="return false;">
+    Address:<input type="text" id="subscribeAddress" value="someaddress"/>
+    <input type="button" id="subscribeButton" value="Subscribe"/>
+  </form>
+
+  <br>
+  Subscriptions:<br>
+
+  <div id="subscribed" class="innerbox" style="width: 400px; height: 230px;">
+  </div>
+</div>
+
+<br>
+
+<div id="receive" class="box" style="position:absolute;left:0px;top:350px">
+
+  Received messages:<br>
+
+  <div id="received" class="innerbox" style="width: 400px; height: 275px;">
+  </div>
+
+</div>
+
+<div id="status" class="box" style="position:absolute;left:450px;top:350px">
+  <input type="button" id="connectButton" value="Open connection"/><br>
+  <input type="button" id="closeButton" value="Close connection"/><br>
+  Connection Status:&nbsp;
+  <div id="status_info">Not connected</div>
+</div>
+</body>
+</html>
