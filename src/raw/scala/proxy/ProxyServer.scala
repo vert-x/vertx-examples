@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-val client = vertx.createHttpClient.setHost("localhost").setPort(8080)
+val client = vertx.createHttpClient.setHost("localhost").setPort(8282)
 
 vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
   container.logger.info("Proxying request: " + req.uri())

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import java.net.URL
-
 val urlBar = getClass().getClassLoader().getResource("bar.txt")
 println("bar url is: " + urlBar)
 val urlFoo = getClass().getClassLoader().getResource("foo.xml")

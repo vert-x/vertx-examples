@@ -55,7 +55,7 @@ To run the server:
 
     vertx run http/Server.scala
 
-Then point your browser at http://localhost:8080
+Then point your browser at <http://localhost:8080>
 
 Alternatively, you can also run the HTTP client in a different console:
 
@@ -116,21 +116,21 @@ The pub-sub server understands the following simple text protocol. Each line is 
 
 To subscribe to a topic:
 
-subscribe,<topic_name>
+    subscribe,<topic_name>
 
 To unsubscribe from a topic:
 
-unsubscribe,<topic_name>
+    unsubscribe,<topic_name>
 
 To publish a message to a topic:
 
-publish,<topic_name>,<message>
+    publish,<topic_name>,<message>
 
 Where:
 
-<topic_name> is the name of a topic
+`<topic_name>` is the name of a topic
 
-<message is some string you want to publish
+`<message>` is some string you want to publish
 
 To run the server:
 
@@ -140,15 +140,15 @@ Then open some more consoles and telnet localhost 8080, and experiment with the 
 
 ## SendFile
 
-Simple web server that uses sendfile to serve content directly from disk to the socket bypassing user space. This is a very efficient way of serving static files from disk.
+Simple web server that uses `sendFile` to serve content directly from disk to the socket bypassing user space. This is a very efficient way of serving static files from disk.
 
-The example contains three static pages: index.html, page1.html and page2.html which are all served using sendfile.
+The example contains three static pages: `index.html`, `page1.html` and `page2.html` which are all served using sendfile.
 
 To run the server:
 
     vertx run sendfile/SendFileExample.scala
 
-Then point your browser at http://localhost:8080 and click around
+Then point your browser at <http://localhost:8080> and click around
 
 ## SSL
 
@@ -185,7 +185,7 @@ To run the server:
 
     vertx run websockets/WebsocketsExample.scala
 
-Then point your browser at: http://localhost:8080
+Then point your browser at: <http://localhost:8080>
 
 ## Route Match
 
@@ -194,13 +194,13 @@ in the manner of express (JS) or Sinatra.
 
 To run the example:
 
-    vertx run routematch/RouteMatchExample.scala
+    vertx run route_match/RouteMatchExample.scala
 
-Then point your browser at: http://localhost:8080.
+Then point your browser at: <http://localhost:8080>
 
 An index page will be served which contains some links to urls of the form:
 
-/details/<user>/<id>
+    /details/<user>/<id>
 
 The server will extract the user and id from the uri and display it on the returned page
 
@@ -215,7 +215,7 @@ To run the server:
 
     vertx run sockjs/SockJSExample.scala
 
-Then point your browser at: http://localhost:8080
+Then point your browser at: <http://localhost:8080>
 
 ## Resource Load
 
@@ -255,7 +255,7 @@ can talk to each other:
     vertx run eventbus_pubsub/Receiver.scala -cluster
     vertx run eventbus_pubsub/Sender.scala -cluster
 
-## simpleform
+## Simple Form
 
 A simple http server example that handles form data.
 
@@ -263,17 +263,17 @@ To run the server:
 
     vertx run simpleform/SimpleFormServer.scala
 
-Now access the form via your browser at http://localhost:8080
+Now access the form via your browser at <http://localhost:8080>
 
-## simpleformupload
+## Simple Form Upload
 
 A simple http server example that handles file upload via a form
 
 To run the server:
 
-    vertx run simpleform/SimpleFormUploadServer.scala
+    vertx run simpleformupload/SimpleFormUploadServer.scala
 
-Now access the form via your browser at http://localhost:8080
+Now access the form via your browser at <http://localhost:8080>
 
 
 

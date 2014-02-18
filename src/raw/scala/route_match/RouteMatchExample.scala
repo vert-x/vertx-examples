@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-val rm = new RouteMatcher()
+val rm = RouteMatcher()
 
 rm.get("/details/:user/:id", { req: HttpServerRequest =>
   req.response().end("User: " + req.params().get("user") + " ID: " + req.params().get("id"))

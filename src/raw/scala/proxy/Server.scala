@@ -32,4 +32,4 @@ vertx.createHttpServer().requestHandler({ req: HttpServerRequest =>
     (0 until 10) map { i => req.response.write("server-data-chunk" + i) }
     req.response().end()
   })
-}).listen(8080)
+}).listen(8282)

@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import java.util.{ Set => JSet }
-import scala.collection.JavaConversions._
-
-val connections: JSet[String] = vertx.sharedData.getSet("conns")
+val connections = vertx.sharedData.getSet[String]("conns")
 
 vertx.createNetServer.connectHandler({ socket: NetSocket =>
   connections.add(socket.writeHandlerID)

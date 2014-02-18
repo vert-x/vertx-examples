@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-import org.vertx.scala.core.FunctionConverters._
-
 vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
   if (req.uri().equals("/")) {
     // Serve the index page
     req.response().sendFile("simpleformupload/index.html")
   } else if (req.uri().startsWith("/form")) {
     req.expectMultiPart(true)
-    req.uploadHandler(fnToHandler({ upload: HttpServerFileUpload =>
+    req.uploadHandler({ upload: HttpServerFileUpload =>
       upload.exceptionHandler({ event: Throwable =>
         req.response().end("Upload failed")
       })
-      upload.endHandler({ event: Void =>
-        req.response().end("Upload successful, you should see the file in the server directory")
+      upload.endHandler({
+        req.response().end("Upload successful, you should see the file in the directory from where Vert.x was launched")
       })
       upload.streamToFileSystem(upload.filename())
-    }))
+    })
   } else {
     req.response().setStatusCode(404)
     req.response().end()
