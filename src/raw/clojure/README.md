@@ -296,3 +296,13 @@ Run with:
 
     cd embedded
     lein run
+
+## Core.async in Vert.x
+
+Demonstrates using Clojure's core.async in Vertx.
+Learn more about core.async at: <https://github.com/clojure/core.async>
+
+Run with:
+
+    cd async
+    lein run
