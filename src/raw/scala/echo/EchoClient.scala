@@ -14,6 +14,20 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+vertx.createNetClient.connect(8080, "localhost", { asyncResult: AsyncResult[NetSocket] =>
+  if (asyncResult.succeeded()) {
+    val socket = asyncResult.result()
+    socket.dataHandler({ buffer: Buffer =>
+      container.logger.info("Net client receiving: " + buffer)
+    })
+
+    //Now send some data
+    for (i <- 0 until 10) {
+      val str = "hello" + i + "\n"
+      container.logger.info("Net client sending: " + str)
+      socket.write(Buffer(str))
+    }
+  } else {
+    asyncResult.cause.printStackTrace()
+  }
+})

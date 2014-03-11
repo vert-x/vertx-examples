@@ -14,6 +14,17 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+import scala.collection.JavaConversions._
+
+vertx.createHttpServer.requestHandler({ req: HttpServerRequest =>
+  container.logger.info("Got request: " + req.uri())
+  container.logger.info("Headers are: ")
+
+  for (entry <- req.headers.entries()) {
+    container.logger.info(entry.getKey() + ":" + entry.getValue())
+  }
+
+  req.response.headers().set("Content-Type", "text/html; charset=UTF-8")
+  req.response.setChunked(true)
+  req.response.write("<html><body><h1>Hello from vert.x!</h1></body></html>", "UTF-8").end()
+}).setSSL(true).setKeyStorePath("server-keystore.jks").setKeyStorePassword("wibble").listen(8080)

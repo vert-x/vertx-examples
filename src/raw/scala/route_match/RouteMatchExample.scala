@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+val rm = RouteMatcher()
+
+rm.get("/details/:user/:id", { req: HttpServerRequest =>
+  req.response().end("User: " + req.params().get("user") + " ID: " + req.params().get("id"))
+})
+
+// Catch all - serve the index page
+rm.getWithRegEx(".*", { req: HttpServerRequest =>
+  req.response().sendFile("route_match/index.html")
+})
+
+vertx.createHttpServer().requestHandler(rm).listen(8080)

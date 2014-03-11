@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+val webroot = "sendfile/"
+
+vertx.createHttpServer().requestHandler({ req: HttpServerRequest =>
+  if (req.path().equals("/")) {
+    req.response().sendFile(webroot + "index.html")
+  } else {
+    //Clearly in a real server you would check the path for better security!!
+    req.response().sendFile(webroot + req.path())
+  }
+}).listen(8080)

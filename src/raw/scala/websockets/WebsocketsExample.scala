@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+vertx.createHttpServer().websocketHandler({ ws: ServerWebSocket =>
+  if (ws.path().equals("/myapp")) {
+    ws.dataHandler({ data: Buffer =>
+      ws.writeTextFrame(data.toString()) // Echo it back
+    })
+  } else {
+    ws.reject()
+  }
+}).requestHandler({ req: HttpServerRequest =>
+  if (req.path().equals("/")) req.response().sendFile("websockets/ws.html") // Serve the html
+}).listen(8080)

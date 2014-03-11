@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+private val CONNS = 1000
+var connectCount = 0
+
+val client = vertx.createHttpClient.setPort(8080).setHost("localhost").setMaxPoolSize(CONNS)
+
+for (i <- 0 until CONNS) {
+  client.connectWebsocket("/someuri", { ws: WebSocket =>
+    connectCount += 1
+    container.logger.info("ws connected: " + connectCount)
+  })
+}

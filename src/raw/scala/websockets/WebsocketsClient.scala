@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+vertx.createHttpClient().setHost("localhost").setPort(8080).connectWebsocket("/myapp", { websocket: WebSocket =>
+  websocket.dataHandler({ data: Buffer =>
+    container.logger.info("Received " + data)
+  })
+  //Send some data
+  websocket.writeTextFrame("hello world")
+})

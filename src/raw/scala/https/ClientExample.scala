@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+vertx.createHttpClient.setSSL(true).setTrustAll(true).setPort(8080).setHost("localhost").getNow("/", { response: HttpClientResponse =>
+  response.dataHandler({ data: Buffer =>
+    container.logger.info(data)
+  })
+})

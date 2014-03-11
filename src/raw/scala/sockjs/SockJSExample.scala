@@ -14,6 +14,19 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+import org.vertx.scala.core.sockjs.SockJSSocket
+
+val server = vertx.createHttpServer()
+
+server.requestHandler({ req: HttpServerRequest =>
+  if (req.path().equals("/")) req.response().sendFile("sockjs/index.html") // Serve the html
+})
+
+val sockServer = vertx.createSockJSServer(server)
+
+sockServer.installApp(Json.obj("prefix" -> "/testapp"), { sock: SockJSSocket =>
+  sock.dataHandler({ data: Buffer =>
+    sock.write(data) // Echo it back
+  })
+})
+server.listen(8080)

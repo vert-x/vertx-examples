@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+var vertx = require('vertx');
+var console = require('console');
+
+var connCount = 0;
+vertx.createHttpServer().websocketHandler(function(ws) {
+  console.log("Connection count: " + ++connCount);
+  new vertx.Pump(ws, ws).start();
+}).listen(8080);

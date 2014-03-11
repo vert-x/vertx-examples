@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+val urlBar = getClass().getClassLoader().getResource("bar.txt")
+println("bar url is: " + urlBar)
+val urlFoo = getClass().getClassLoader().getResource("foo.xml")
+println("foo url is: " + urlFoo)

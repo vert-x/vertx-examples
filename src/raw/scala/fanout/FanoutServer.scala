@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+val connections = vertx.sharedData.getSet[String]("conns")
+
+vertx.createNetServer.connectHandler({ socket: NetSocket =>
+  connections.add(socket.writeHandlerID)
+
+  socket.dataHandler({ buffer: Buffer =>
+    for (actorID <- connections) {
+      vertx.eventBus.publish(actorID, buffer)
+    }
+  })
+
+  socket.closeHandler({
+    connections.remove(socket.writeHandlerID())
+  })
+}).listen(8080)

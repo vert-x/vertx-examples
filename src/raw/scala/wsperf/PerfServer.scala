@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+  val BUFF_SIZE = 32 * 1024
+
+    vertx.createHttpServer().setReceiveBufferSize(BUFF_SIZE).setSendBufferSize(BUFF_SIZE).setAcceptBacklog(32000).
+        websocketHandler({ ws: ServerWebSocket =>
+        Pump.createPump(ws, ws, BUFF_SIZE).start()
+    }).listen(8080, "localhost")

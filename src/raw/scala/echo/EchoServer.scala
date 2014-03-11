@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+vertx.createNetServer.connectHandler({ socket: NetSocket =>
+  Pump.createPump(socket, socket).start()
+}).listen(8080)

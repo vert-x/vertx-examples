@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+vertx.createNetServer().connectHandler({ socket: NetSocket =>
+  socket.dataHandler({ buffer: Buffer =>
+    socket.write(buffer)
+  })
+}).setSSL(true).setKeyStorePath("server-keystore.jks").setKeyStorePassword("wibble").listen(8080)

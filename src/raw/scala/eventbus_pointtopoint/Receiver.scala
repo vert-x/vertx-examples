@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-vertx.createHttpServer.requestHandler { req: HttpServerRequest =>
-  req.response.end("This is a Verticle script")
-}.listen(8080)
+vertx.eventBus.registerHandler("ping-address", { message: Message[String] =>
+  // Reply to it
+  container.logger.info("Received message: " + message.body())
+  message.reply("pong!")
+})
