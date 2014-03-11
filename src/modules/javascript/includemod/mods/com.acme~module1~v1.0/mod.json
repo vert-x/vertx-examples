@@ -1,0 +1,4 @@
+{
+ "includes": "com.acme~common-stuff~v1.0",
+ "main": "run_module_1.js"
+}
