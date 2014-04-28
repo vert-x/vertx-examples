@@ -10,7 +10,7 @@ Prerequisites:
 
 (for full help on deploying just type `vertx` from the command line)
 
-* all examples should be run from this directory unless otherwise stated *
+**all examples should be run from this directory unless otherwise stated**
 
     vertx run <example script name>
 
@@ -111,25 +111,24 @@ The pub-sub server understands the following simple text protocol. Each line is 
 
 To subscribe to a topic:
 
-subscribe,<topic_name>
+    subscribe,<topic_name>
 
 To unsubscribe from a topic:
 
-unsubscribe,<topic_name>
+    unsubscribe,<topic_name>
 
 To publish a message to a topic:
 
-publish,<topic_name>,<message>
+    publish,<topic_name>,<message>
 
 Where:
 
-<topic_name> is the name of a topic
-
-<message is some string you want to publish
+    <topic_name> is the name of a topic
+    <message> is some string you want to publish
 
 To run the server:
 
-    vertx run -pubsub/PubSubServer.groovy
+    vertx run pubsub/PubSubServer.groovy
 
 Then open some more consoles and telnet localhost 1234, and experiment with the protocol.
 
@@ -241,7 +240,7 @@ Receiver.groovy registers an event bus handler and displays a message when a mes
 Sender.groovy sends a message every second.
 
     vertx run eventbus_pointtopoint/Receiver.groovy -cluster
-
+    
     vertx run eventbus_pointtopoint/Sender.groovy -cluster
 
 ## EventBus Pub Sub
@@ -276,7 +275,7 @@ A simple http server example that handles file upload via a form
 
 To run the server:
 
-    vertx run simpleform/SimpleFormUploadServer.groovy
+    vertx run simpleformupload/SimpleFormUploadServer.groovy
 
 Now access the form via your browser at http://localhost:8080
 
