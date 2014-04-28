@@ -10,7 +10,7 @@ Prerequisites:
 
 (for full help on deploying just type `vertx` from the command line)
 
-* all examples should be run from this directory unless otherwise stated *
+**all examples should be run from this directory unless otherwise stated**
 
     vertx run <example script name>
 
