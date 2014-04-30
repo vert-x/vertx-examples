@@ -287,7 +287,7 @@ A simple http server example that handles file upload via a form
 
 To run the server:
 
-    vertx run simpleform/SimpleFormUploadServer.java
+    vertx run simpleformupload/SimpleFormUploadServer.java
 
 Now access the form via your browser at http://localhost:8080
 
