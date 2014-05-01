@@ -42,4 +42,8 @@
 
 (-> (http/server)
     (http/on-request req-handler)
-    (http/listen 8080 "localhost"))
+    (http/listen 8080 "localhost"
+      (fn [ex _]
+        (if ex
+          (println ex)
+          (println "Started HTTP server on localhost:8080")))))

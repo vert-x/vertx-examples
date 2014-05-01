@@ -44,11 +44,34 @@
                         (println "publishing to" topic "with" msg)
                         (doseq [target topic-set!]
                           (bus/send target (buf/buffer (str msg "\n")))))
-            
+
             (stream/write sock (format "unknown command: %s\n" cmd)))))))))
 
 (-> (net/server)
     (net/on-connect connect-handler)
-    (net/listen 1234))
+    (net/listen 1234 "localhost"
+      (fn [ex _]
+        (if ex
+          (println ex)
+          (println
+            "Started pubsub server on localhost:1234.
 
-(println "Starting TCP pub-sub server on localhost:1234")
+Telnet in, and try the following commands:
+
+To subscribe to a topic:
+
+subscribe,<topic_name>
+
+To unsubscribe from a topic:
+
+unsubscribe,<topic_name>
+
+To publish a message to a topic:
+
+publish,<topic_name>,<message>
+
+Where:
+
+<topic_name> is the name of a topic
+
+<message is some string you want to publish")))))

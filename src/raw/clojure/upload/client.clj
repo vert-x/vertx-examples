@@ -26,7 +26,7 @@
 
   ;; For a chunked upload you don't need to specify size
   ;; just set req to chunked true
-  (http/add-header req "Content-Length" (:size (fss/properties filename)))
+  (http/add-header req "Content-Length" (str (:size (fss/properties filename))))
 
   (fs/open filename
            (fn [err file]

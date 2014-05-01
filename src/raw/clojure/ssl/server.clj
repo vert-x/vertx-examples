@@ -24,6 +24,8 @@
      (fn [sock]
        (stream/on-data sock
                        (partial stream/write sock))))
-    (net/listen 1234 "localhost"))
-
-(println "Starting Net Server with SSL on localhost 1234")
+    (net/listen 1234 "localhost"
+      (fn [ex _]
+        (if ex
+          (println ex)
+          (println "Started Net server with SSL on localhost:1234")))))

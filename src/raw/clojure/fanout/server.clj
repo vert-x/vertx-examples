@@ -27,4 +27,8 @@
                                 (doseq [sock-id conns]
                                   (eb/send sock-id data))))
          (net/on-close sock #(shared/remove! conns (.writeHandlerID sock)))))
-      (net/listen 1234)))
+      (net/listen 1234 "localhost"
+        (fn [ex _]
+          (if ex
+            (println ex)
+            (println "Started. Telnet to localhost:1234 to test"))))))
