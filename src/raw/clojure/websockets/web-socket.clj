@@ -23,12 +23,14 @@
        (when (= "/" (.path req))
          (http/send-file (http/server-response req)
                          "websockets/ws.html"))))
-    
+
     (ws/on-websocket
      (fn [ws] (if (= "/myapp" (.path ws))
                 (stream/on-data ws (partial ws/write-text-frame ws))
                 (.reject ws))))
 
-    (http/listen 8080 "localhost"))
-
-(println "Http server on localhost:8080")
+    (http/listen 8080 "localhost"
+      (fn [ex _]
+        (if ex
+          (println ex)
+          (println "Started HTTP server on localhost:8080")))))

@@ -22,6 +22,8 @@
          (if (= "/" (.path req))
            (http/send-file resp (str root-path "index.html"))
            (http/send-file resp (str root-path (.path req)))))))
-    (http/listen 8080 "localhost"))
-
-(println "Starting Http server on localhost:8080")
+    (http/listen 8080 "localhost"
+      (fn [ex _]
+        (if ex
+          (println ex)
+          (println "Started HTTP server on localhost:8080")))))

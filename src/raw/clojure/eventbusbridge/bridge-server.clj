@@ -48,4 +48,7 @@
       (sockjs/bridge {:prefix "/eventbus"} [{}] [{}]))
 
   (http/listen server 8080 "localhost"
-               (println "Starting Http server on localhost:8080")))
+    (fn [ex _]
+        (if ex
+          (println ex)
+          (println "Started HTTP server on localhost:8080")))))

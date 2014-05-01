@@ -23,12 +23,13 @@
                     (http/end (http/server-response %)
                               (str "User: " (:user params)
                                    " ID: " (:id params)))))
-         
+
          ;;Catch all - serve the index page
          (rm/all #".*"
                  #(http/send-file (http/server-response %)
                                   "route_match/index.html"))))
-    (http/listen 8080 "localhost"))
-
-(println "Starting Http server on localhost:8080")
-
+    (http/listen 8080 "localhost"
+      (fn [ex _]
+        (if ex
+          (println ex)
+          (println "Started HTTP server on localhost:8080")))))
