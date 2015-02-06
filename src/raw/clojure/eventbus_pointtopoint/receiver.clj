@@ -21,4 +21,4 @@
  address
  (fn [msg]
    (println "Received message" msg)
-   (eb/reply msg (str "pong:" msg))))
+   (eb/reply (str "pong:" msg))))
