@@ -111,21 +111,21 @@ The pub-sub server understands the following simple text protocol. Each line is 
 
 To subscribe to a topic:
 
-subscribe,<topic_name>
+    subscribe,<topic_name>
 
 To unsubscribe from a topic:
 
-unsubscribe,<topic_name>
+    unsubscribe,<topic_name>
 
 To publish a message to a topic:
 
-publish,<topic_name>,<message>
+    publish,<topic_name>,<message>
 
 Where:
 
-<topic_name> is the name of a topic
+    <topic_name> is the name of a topic
 
-<message is some string you want to publish
+    <message> is some string you want to publish
 
 To run the server:
 
@@ -197,7 +197,7 @@ Then point your browser at: http://localhost:8080.
 
 An index page will be served which contains some links to urls of the form:
 
-/details/<user>/<id>
+`/details/<user>/<id>`
 
 The server will extract the user and id from the uri and display it on the returned page
 
