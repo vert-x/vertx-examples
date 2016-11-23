@@ -106,7 +106,7 @@ function CartController($scope, $filter) {
 
   $scope.login = function() {
     if ($scope.username.trim() != '' && $scope.password.trim() != '') {
-      eb.send('vertx.basicauthmanager.login', {username: $scope.username, password: $scope.password}, function (reply) {
+      eb.login($scope.username, $scope.password, function (reply) {
         if (reply.status === 'ok') {
           $scope.loggedIn = true;
           $scope.$apply();
